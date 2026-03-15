@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Local secrets and instance data
+.env
+instance/
+
+# One-off / local automation (not part of the assessed app)
+tools/
+
+# OS
+.DS_Store
