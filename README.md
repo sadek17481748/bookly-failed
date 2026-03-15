@@ -1,9 +1,38 @@
-# bookly — bookstore app
+# bookly — bookstore (PostgreSQL + HTML + CSS + JavaScript + Python)
 
-This line of work continues from the earlier **`bookly-failed`** coursework repository (access was lost mid-project):
+## Table of Contents
 
-- Legacy reference: https://github.com/sadek17481748/bookly-failed.git
+- [Overview](#overview)
+  - [Project goals](#project-goals)
+  - [Planning notes (written at project start)](#planning-notes-written-at-project-start)
+- [Quick links (assessor)](#quick-links-assessor)
+- [Features](#features)
+- [User Experience (UX)](#user-experience-ux)
+  - [User stories](#user-stories)
+- [Wireframes](#wireframes)
+- [Design](#design)
+- [Technologies Used](#technologies-used)
+- [File Structure](#file-structure)
+- [Development](#development)
+- [Deployment](#deployment)
+- [Technical overview](#technical-overview)
+  - [Why PostgreSQL is the technical centre of this work](#why-postgresql-is-the-technical-centre-of-this-work)
+  - [Request flow overview](#request-flow-overview)
+  - [Role of Flask](#role-of-flask)
+  - [Project 3 scope vs what this submission demonstrates](#project-3-scope-vs-what-this-submission-demonstrates)
+  - [Database (PostgreSQL)](#database-postgresql)
+  - [HTML, CSS, JavaScript](#html-css-javascript)
+- [Testing and Bugs](#testing-and-bugs)
+  - [Manual Testing](#manual-testing)
+  - [Automated Testing](#automated-testing)
+  - [Testing Summary Table](#testing-summary-table)
+  - [Lighthouse Testing](#lighthouse-testing)
+  - [HTML, CSS and JS Validation](#html-css-and-js-validation)
+- [Sources and references](#sources-and-references)
+  - [Feature resources (inspiration & references)](#feature-resources-inspiration--references)
+- [Attributions](#attributions)
+- [Additional Notes](#additional-notes)
+- [Author](#author)
 
-Commits from **15 March 2026** through **20 April 2026** were reconstructed on this branch to mirror how the Flask + PostgreSQL app was built; the documentation below grows in later commits in the same order it was written.
+---
 
-Live deployment: https://bookly-final-98e88d5d388e.herokuapp.com/
