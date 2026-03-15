@@ -1,0 +1,12 @@
+# Core web stack (Flask + ORM + auth + env file loading)
+Flask>=3.0.0
+Flask-SQLAlchemy>=3.1.1
+Flask-Login>=0.6.3
+python-dotenv>=1.0.1
+# PostgreSQL driver (binary wheel for simpler installs)
+psycopg2-binary>=2.9.9
+# Production HTTP server (Heroku reads the Procfile)
+gunicorn>=22.0.0
+
+# Automated tests (pytest + Flask test client; uses sqlite:///:memory: — see tests/conftest.py)
+pytest>=8.0.0
