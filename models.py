@@ -35,3 +35,22 @@ class User(db.Model, UserMixin):
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
 
+
+# ================= BOOK CATALOG =================
+class Book(db.Model):
+    __tablename__ = "books"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False, index=True)
+    author = db.Column(db.String(255), nullable=False, index=True)
+    category = db.Column(db.String(255), nullable=False, default="Uncategorized", index=True)
+    price_cents = db.Column(db.Integer, nullable=False)
+    description = db.Column(db.Text, nullable=False, default="")
+    cover_url = db.Column(db.String(1024), nullable=True)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    reviews = db.relationship("Review", back_populates="book", cascade="all, delete-orphan")
+
+    def price_dollars(self) -> str:
+        return f"{self.price_cents / 100:.2f}"
+
