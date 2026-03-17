@@ -54,3 +54,19 @@ class Book(db.Model):
     def price_dollars(self) -> str:
         return f"{self.price_cents / 100:.2f}"
 
+
+# ================= REVIEWS (USER ↔ BOOK) =================
+class Review(db.Model):
+    __tablename__ = "reviews"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    book_id = db.Column(db.Integer, db.ForeignKey("books.id"), nullable=False, index=True)
+    rating = db.Column(db.Integer, nullable=False)  # 1–5
+    body = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    user = db.relationship("User", back_populates="reviews")
+    book = db.relationship("Book", back_populates="reviews")
+
+
