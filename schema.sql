@@ -25,3 +25,15 @@ CREATE TABLE IF NOT EXISTS books (
   cover_url VARCHAR(1024),
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
+-- ---------------------------------------------------------------------------
+-- Reviews (links user + book)
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS reviews (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  book_id INTEGER NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+  rating INTEGER NOT NULL,
+  body TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
