@@ -86,3 +86,30 @@ class CartItem(db.Model):
 
     __table_args__ = (db.UniqueConstraint("user_id", "book_id", name="uq_cart_user_book"),)
 
+
+# ================= ORDERS =================
+# Header row + line items (unit price snapshot stored at checkout time).
+class Order(db.Model):
+    __tablename__ = "orders"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    total_cents = db.Column(db.Integer, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    user = db.relationship("User", back_populates="orders")
+    items = db.relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
+
+
+# ================= ORDER ITEMS =================
+class OrderItem(db.Model):
+    __tablename__ = "order_items"
+
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey("orders.id"), nullable=False, index=True)
+    book_id = db.Column(db.Integer, db.ForeignKey("books.id"), nullable=False, index=True)
+    quantity = db.Column(db.Integer, nullable=False)
+    unit_price_cents = db.Column(db.Integer, nullable=False)  # copy of book price at checkout time
+
+    order = db.relationship("Order", back_populates="items")
+    book = db.relationship("Book")
