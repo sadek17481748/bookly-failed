@@ -12,3 +12,16 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
+-- ---------------------------------------------------------------------------
+-- Book catalog
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS books (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  author VARCHAR(255) NOT NULL,
+  category VARCHAR(255) NOT NULL DEFAULT 'Uncategorized',
+  price_cents INTEGER NOT NULL,
+  description TEXT NOT NULL DEFAULT '',
+  cover_url VARCHAR(1024),
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
