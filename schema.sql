@@ -37,3 +37,15 @@ CREATE TABLE IF NOT EXISTS reviews (
   body TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
+-- ---------------------------------------------------------------------------
+-- Shopping cart lines (one row per user + book)
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS cart_items (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  book_id INTEGER NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+  quantity INTEGER NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  CONSTRAINT uq_cart_user_book UNIQUE (user_id, book_id)
+);
