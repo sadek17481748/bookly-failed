@@ -49,3 +49,13 @@ CREATE TABLE IF NOT EXISTS cart_items (
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   CONSTRAINT uq_cart_user_book UNIQUE (user_id, book_id)
 );
+
+-- ---------------------------------------------------------------------------
+-- Orders (checkout header)
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS orders (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
+  total_cents INTEGER NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
