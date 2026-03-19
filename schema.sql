@@ -59,3 +59,14 @@ CREATE TABLE IF NOT EXISTS orders (
   total_cents INTEGER NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
+-- ---------------------------------------------------------------------------
+-- Order line items (price snapshot per line)
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS order_items (
+  id SERIAL PRIMARY KEY,
+  order_id INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+  book_id INTEGER NOT NULL REFERENCES books(id) ON DELETE RESTRICT,
+  quantity INTEGER NOT NULL,
+  unit_price_cents INTEGER NOT NULL
+);
