@@ -100,3 +100,70 @@ Based on the routes above, my wireframe plan is:
 - **Admin add book (`/admin/books/new`)**: form to add a new book to the catalogue.
 - **Error pages (403/404)**: friendly messages with navigation back to safe pages.
 
+## User Experience (UX)
+
+### Navigation
+
+- **Sticky** top bar with brand link, **Home**, **Books**, **Contact**.
+- When logged in: **Cart**, **Orders**, **Logout**; if `is_admin`: **Analytics**.
+- When logged out: **Login**, **Register**.
+- **Mobile:** hamburger control toggles link visibility; `aria-expanded` updated in JS for accessibility.
+
+### Interaction design
+
+- **Flash messages** after register, login, cart changes, checkout, errors (categories `success` / `error` styled in CSS).
+- **Forms** use labels, placeholders where helpful, and `sr-only` labels for compact controls (e.g. quantity on cart rows).
+- **Skip link** to `#main` for keyboard users.
+- **Confirm** dialog on destructive actions (e.g. delete review) via `data-confirm` in `main.js`.
+
+### Responsive behaviour
+
+- **Best viewed on laptop/desktop:** the catalogue grid, checkout summary, order history, and especially the **admin analytics tables** are easier to read and compare on a wider screen (more items visible at once, less scrolling).
+- **Phone/tablet support:** the site was adjusted to be usable on smaller screens (responsive CSS breakpoints stack multi-column layouts into a single column, the book detail page collapses, the footer becomes one column, and the navigation switches to a hamburger menu).
+
+#### Responsiveness testing evidence
+
+![Responsive testing on mobile, tablet and laptop](docs/images/validation/responsive-test-devices.png)
+
+### User stories
+
+**First-time / guest user**
+
+- As a guest, I want to land on a clear home page so I understand what the site does and what I can do next.
+- As a guest, I want to browse the catalogue so I can explore what books are available before making an account.
+- As a guest, I want to search by title/author so I can find a specific book quickly.
+- As a guest, I want to open a book detail page so I can read the description and existing reviews before deciding whether to register.
+- As a guest, I want to see a clear message when I try to access a protected feature (cart, orders, reviews) so I know I need to log in.
+
+**Registered / returning user**
+
+- As a user, I want to register and log in so I can access features that require an account (reviews, cart, checkout, orders).
+- As a user, I want to add books to my cart and adjust quantities so I can control my order without starting over.
+- As a user, I want the cart total to update correctly when I change quantities so I can trust the checkout amount.
+- As a user, I want to check out so my purchase is saved as an order (with order items) in the database.
+- As a user, I want to view my order history so I can confirm what I bought after checkout.
+- As a user, I want to create reviews with a rating and text so I can share feedback on books I read.
+- As a user, I want to edit/delete **my own** reviews so I can correct mistakes or remove outdated feedback.
+- As a user, I want to be prevented from editing/deleting other people’s reviews so the site feels fair and secure.
+
+**Admin**
+
+- As an admin, I want to view the analytics dashboard so I can monitor revenue, orders, and top-selling books.
+- As an admin, I want to see a category breakdown so I can understand the shape of the catalogue at a glance.
+- As an admin, I want to add a new book to the catalogue (including a category and cover) so I can expand inventory without touching the database directly.
+- As an admin, I want non-admin users to be blocked from admin pages so sensitive business information is protected.
+
+### Target audience & user stories
+
+The site is aimed at **readers** who want a simple way to browse a small catalogue, check book details, read/write reviews, and place an order using a lightweight checkout flow. It is also aimed at a **store admin** who needs quick visibility of what is happening in the store (revenue, order volume, top sellers, and category distribution) without exporting data or running SQL manually.
+
+In practice, I thought about three “audience groups” while building and testing:
+
+- **Guest visitors**: explore the catalogue and understand the value of the site without being forced to create an account immediately.
+- **Registered customers**: complete the core journey (browse → cart → checkout → orders) and manage their own reviews.
+- **Admin user**: manage the catalogue (add books) and review store performance using the analytics dashboard.
+
+The user stories above are the ones I used to guide feature scope and testing. They map directly to the live routes and the database flows (catalogue read, review write, cart write, order + order items write, and analytics aggregates).
+
+---
+
