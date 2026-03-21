@@ -54,3 +54,18 @@ a:hover { color: white; }
   color: #000;
   padding: 8px 12px;
   border-radius: 10px;
+}
+.skip-link:focus { left: 10px; z-index: 10; }
+
+/* ================= HEADER + NAVIGATION ================= */
+/* Sticky top bar: logo, links, mobile menu button */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(11, 18, 32, 0.70);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav {
