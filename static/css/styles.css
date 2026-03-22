@@ -153,3 +153,17 @@ a:hover { color: white; }
   text-decoration: none;
 }
 .icon-link:hover { filter: brightness(1.12); }
+.icon-link svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* ================= CONTACT PAGE ================= */
+/* Contact page bullet list */
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
