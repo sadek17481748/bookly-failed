@@ -125,3 +125,17 @@ a:hover { color: white; }
   font-size: 14px;
   color: var(--muted);
 }
+.footer-links {
+  display: grid;
+  gap: 10px;
+}
+.footer-links a {
+  text-decoration: none;
+  color: var(--muted);
+}
+.footer-links a:hover { color: white; }
+
+.footer-social {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
