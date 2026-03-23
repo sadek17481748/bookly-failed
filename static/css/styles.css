@@ -181,3 +181,18 @@ a:hover { color: white; }
 .hero h1 { margin: 0 0 8px; font-size: 38px; line-height: 1.1; }
 .hero p { margin: 0 0 16px; color: var(--muted); }
 .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* ================= GRID + CARD COMPONENTS ================= */
+/* Generic responsive grids + panel “cards” */
+.grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+.grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.card {
+  border: 1px solid var(--border);
+  background: rgba(16, 26, 48, 0.75);
+  border-radius: var(--radius);
