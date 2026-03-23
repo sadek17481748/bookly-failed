@@ -210,3 +210,17 @@ a:hover { color: white; }
   border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.04);
 }
+.cover.placeholder { display: block; }
+.cover.large { max-width: 240px; width: 100%; }
+
+.book-title { margin: 10px 0 6px; font-size: 18px; }
+.book-title a { text-decoration: none; }
+.price { margin-top: 8px; font-weight: 700; }
+.price.big { font-size: 22px; }
+
+/* ================= FORMS ================= */
+/* Fields, inputs, screen-reader-only labels */
+.narrow { width: min(520px, 100%); margin: 0 auto; }
+.field { display: grid; gap: 6px; margin-bottom: 12px; }
+.field label { font-weight: 650; }
+
