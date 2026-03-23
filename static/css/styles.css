@@ -252,3 +252,17 @@ textarea { resize: vertical; }
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(124, 92, 255, 0.40);
+  background: linear-gradient(180deg, rgba(124, 92, 255, 0.95), rgba(124, 92, 255, 0.65));
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn-secondary {
+  border-color: rgba(32, 201, 151, 0.38);
