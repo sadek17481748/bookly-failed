@@ -196,3 +196,17 @@ a:hover { color: white; }
   border: 1px solid var(--border);
   background: rgba(16, 26, 48, 0.75);
   border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+/* ================= BOOK LISTING CARDS ================= */
+/* Book grid cards (listing + shared card chrome) */
+.book-card .cover {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+}
