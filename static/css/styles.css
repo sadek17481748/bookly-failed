@@ -308,3 +308,17 @@ textarea { resize: vertical; }
   grid-template-columns: 240px 1fr;
   gap: 18px;
   align-items: start;
+}
+
+/* ----- Flask flash categories (success / error) ----- */
+.flash-stack { display: grid; gap: 10px; margin-bottom: 14px; }
+.flash {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.flash-success { border-color: rgba(32, 201, 151, 0.35); }
+.flash-error { border-color: rgba(255, 92, 124, 0.40); }
+
+/* ----- Reviews block + checkout order summary list ----- */
