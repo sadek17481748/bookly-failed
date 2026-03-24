@@ -266,3 +266,17 @@ textarea { resize: vertical; }
 .btn:hover { filter: brightness(1.08); }
 .btn-secondary {
   border-color: rgba(32, 201, 151, 0.38);
+  background: linear-gradient(180deg, rgba(32, 201, 151, 0.95), rgba(32, 201, 151, 0.62));
+}
+.btn-danger {
+  border-color: rgba(255, 92, 124, 0.45);
+  background: linear-gradient(180deg, rgba(255, 92, 124, 0.95), rgba(255, 92, 124, 0.62));
+}
+.btn-small { padding: 8px 10px; border-radius: 11px; font-size: 14px; }
+
+.linklike {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
