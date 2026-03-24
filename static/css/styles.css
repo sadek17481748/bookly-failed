@@ -280,3 +280,17 @@ textarea { resize: vertical; }
   color: var(--muted);
   cursor: pointer;
   font: inherit;
+  padding: 0;
+}
+.linklike:hover { color: white; }
+.inline { display: inline; }
+
+/* ----- Flex rows: toolbars, review headers, cart rows ----- */
+.row { display: flex; align-items: center; gap: 12px; }
+.row.between { justify-content: space-between; }
+.wrap { flex-wrap: wrap; }
+.stack { display: grid; gap: 12px; margin-top: 12px; }
+
+/* ----- Books index: title row + search field ----- */
+.page-head {
+  display: flex;
