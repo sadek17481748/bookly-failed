@@ -337,3 +337,17 @@ textarea { resize: vertical; }
 
 /* ----- Tight vertical lists (admin recent orders, categories) ----- */
 .mini-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: grid;
+  gap: 8px;
+}
+.mini-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* ----- Scrollable tables (admin top sellers) ----- */
+.table-wrap { overflow: auto; }
