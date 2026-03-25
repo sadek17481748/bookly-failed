@@ -365,3 +365,17 @@ textarea { resize: vertical; }
 .table .right { text-align: right; }
 
 /* ----- Narrow screens: simplify grids ----- */
+@media (max-width: 860px) {
+  .grid.three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .book-detail { grid-template-columns: 1fr; }
+}
+
+/* ----- Phones: single column + hamburger nav ----- */
+@media (max-width: 620px) {
+  .grid.two { grid-template-columns: 1fr; }
+  .grid.three { grid-template-columns: 1fr; }
+
+  .nav-toggle { display: inline-flex; }
+  .nav-links {
+    display: none;
+    width: 100%;
