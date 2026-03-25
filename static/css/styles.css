@@ -351,3 +351,17 @@ textarea { resize: vertical; }
 
 /* ----- Scrollable tables (admin top sellers) ----- */
 .table-wrap { overflow: auto; }
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.table th, .table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.table th { text-align: left; color: var(--muted); font-size: 14px; }
+.table .right { text-align: right; }
+
+/* ----- Narrow screens: simplify grids ----- */
