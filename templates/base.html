@@ -1,0 +1,18 @@
+{# ============================================================ #}
+{# BASE LAYOUT (`base.html`)                                     #}
+{# - Shared HTML skeleton for every page                         #}
+{# - Loads global CSS/JS                                         #}
+{# - Contains header navigation + flash messages + footer         #}
+{# ============================================================ #}
+<!doctype html>
+<html lang="en">
+  <head>
+    {# ================= META + ASSETS ================= #}
+    {# Character encoding for proper text display #}
+    <meta charset="utf-8" />
+  <body>
+    <main id="main" class="container">
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>
