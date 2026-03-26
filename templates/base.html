@@ -10,9 +10,53 @@
     {# ================= META + ASSETS ================= #}
     {# Character encoding for proper text display #}
     <meta charset="utf-8" />
+    {# Responsive design for mobile devices #}
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {# Per-page title block #}
+    <title>{% block title %}bookly{% endblock %}</title>
+    {# Global stylesheet #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+    {# Global JavaScript (deferred) #}
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </head>
   <body>
-    <main id="main" class="container">
-      {% block content %}{% endblock %}
-    </main>
-  </body>
-</html>
+    {# ================= SKIP LINK ================= #}
+    {# Keyboard / screen-reader shortcut to main content #}
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    {# ================= HEADER + NAVIGATION ================= #}
+    <header class="site-header">
+      <nav class="nav">
+        {# Site branding #}
+        <a class="brand" href="{{ url_for('home') }}">bookly</a>
+
+        {# Navigation links (shown/hidden based on auth role) #}
+        <div class="nav-links" id="navLinks">
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('books.list_books') }}">Books</a>
+          <a href="{{ url_for('contact') }}">Contact</a>
+
+          {# -------- Authenticated navigation -------- #}
+          {% if current_user.is_authenticated %}
+            <a href="{{ url_for('cart.view_cart') }}">Cart</a>
+            <a href="{{ url_for('orders.list_orders') }}">Orders</a>
+            {% if current_user.is_admin %}
+              <a href="{{ url_for('admin.analytics_dashboard') }}">Analytics</a>
+            {% endif %}
+            {# Logout uses POST to avoid GET side effects #}
+            <form class="inline" method="post" action="{{ url_for('auth.logout') }}">
+              <button class="linklike" type="submit">Logout</button>
+            </form>
+          {% else %}
+            {# -------- Guest navigation -------- #}
+            <a href="{{ url_for('auth.login_form') }}">Login</a>
+            <a class="btn btn-small" href="{{ url_for('auth.register_form') }}">Register</a>
+          {% endif %}
+        </div>
+
+        {# Mobile menu button (toggled by JS) #}
+        <button class="nav-toggle" type="button" aria-controls="navLinks" aria-expanded="false">
+          Menu
+        </button>
+      </nav>
+    </header>
