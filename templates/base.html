@@ -73,3 +73,43 @@
           </div>
         {% endif %}
       {% endwith %}
+
+      {# Child template content #}
+      {% block content %}{% endblock %}
+    </main>
+
+    {# ================= FOOTER ================= #}
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          {# Footer branding #}
+          <div class="footer-brand">
+            <div class="footer-title">bookly</div>
+            <div class="footer-sub">Browse, review, and purchase books.</div>
+          </div>
+
+          {# Footer navigation links #}
+          <div class="footer-links">
+            <a href="{{ url_for('contact') }}">Contact us</a>
+            <a href="{{ url_for('books.list_books') }}">Browse books</a>
+            <a href="/sitemap">Sitemap</a>
+          </div>
+
+          {# Footer social icons (inline SVG) #}
+          <div class="footer-social" aria-label="Social media links">
+            <a class="icon-link" href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm0 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm6.5-.9a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0z"/>
+              </svg>
+            </a>
+            <a class="icon-link" href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="X">
+              <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                <path d="M18.8 2H22l-7.1 8.1L23 22h-6.7l-5.2-6.8L5 22H2l7.7-8.8L1 2h6.9l4.7 6.2L18.8 2zm-1.2 18h1.8L7.9 4H6L17.6 20z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
