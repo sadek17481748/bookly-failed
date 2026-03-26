@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{# ============================================================ #}
+{# HOME PAGE                                                     #}
+{# - Public landing page                                         #}
+{# - Primary calls-to-action: browse + register                  #}
+{# - Short feature highlights                                    #}
+{# ============================================================ #}
+
+{% block title %}Home • bookly{% endblock %}
+
+{% block content %}
+  {# ================= HERO SECTION ================= #}
+  <section class="hero">
+    {# Hero text block #}
+    <div class="hero-text">
+      {# Main headline #}
+      <h1>Find your next great read.</h1>
+      {# Short introduction #}
+      <p>
+        Browse books, add them to your cart, purchase them, and leave reviews.
+      </p>
+      {# Primary call-to-action buttons #}
+      <div class="hero-actions">
+        <a class="btn" href="{{ url_for('books.list_books') }}">Browse books</a>
+        {% if not current_user.is_authenticated %}
+          <a class="btn btn-secondary" href="{{ url_for('auth.register_form') }}">Create account</a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
