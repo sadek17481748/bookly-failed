@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{# ============================================================ #}
+{# 404 NOT FOUND PAGE                                            #}
+{# - Shown when a route does not exist or a resource is missing   #}
+{# ============================================================ #}
+
+{% block title %}Not found • bookly{% endblock %}
+
+{% block content %}
+  {# ================= ERROR MESSAGE ================= #}
+  <div class="narrow">
+    <h1>404 - Page not found</h1>
+    <p class="muted">
+      The page you’re looking for doesn’t exist (or may have moved).
+    </p>
+    <div class="row wrap">
+      <a class="btn" href="{{ url_for('home') }}">Go home</a>
+      <a class="btn btn-secondary" href="{{ url_for('books.list_books') }}">Browse books</a>
+    </div>
+  </div>
+{% endblock %}
+
