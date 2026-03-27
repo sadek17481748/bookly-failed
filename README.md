@@ -203,3 +203,104 @@ The user stories above are the ones I used to guide feature scope and testing. T
 
 ---
 
+## Wireframes
+
+Low-fidelity wireframes for bookly are in this repository as a single PDF:
+
+- **[`docs/wireframe-bookly.pdf`](docs/wireframe-bookly.pdf)** — planning layouts for the main flows (home, catalogue, book detail, auth, cart/checkout, orders, admin). The screens map to the live routes: **Home** (`/`), **Books** (`/books`), **Book detail** (`/books/<id>`), **Login / Register**, **Cart**, **Checkout**, **Orders**, and **Admin analytics** (`/admin/analytics`).
+
+Any extra Figma links or annotated screenshots I used only in the written report stay in the **coursework appendix**; this PDF is the main wireframe file in the repo.
+
+### Wireframe description (screen-by-screen)
+
+The PDF wireframe is intentionally low fidelity (boxes, labels, and simple components), but it still captures the **layout decisions** and the main **user actions** for each route.
+
+#### Global layout used across screens
+
+- **Header navigation**: logo on the left and the main links on the right (**Home**, **Books**, **Contact**).
+- **Auth-aware nav**:
+  - When logged out: **Login**, **Register**
+  - When logged in: **Cart**, **Orders**, **Logout** (and **Analytics** for admin users)
+- **Footer**: quick links (**Contact us**, **Browse books**, **Sitemap**) plus social icons.
+
+#### Home (`/`)
+
+- A hero panel with the primary message (“Discover your next favourite book / Find your next great read”) and two clear calls to action:
+  - **Browse books**
+  - **Create account**
+- Supporting feature cards to preview core functionality (reviews + checkout).
+
+#### Books catalogue (`/books`)
+
+- Page heading (“Our books / Books list”) and a **search bar** (“Search by title or author”).
+- A **grid of book cards**, each showing:
+  - title, author, category, price
+  - an action to **view details** and/or **add to cart** (depending on auth state in the live app).
+
+#### Book detail (`/books/<id>`)
+
+- A split layout with:
+  - **Cover image** panel
+  - **Book metadata** (title, author, category, price) and a longer description
+- A quantity selector and **Add to cart** action (shown for logged-in users in the real UI).
+- Reviews section:
+  - List of reviews (reviewer email, timestamp, rating, body)
+  - Owner controls for edit/delete (represented in the wireframe as buttons alongside reviews).
+
+#### Login (`/login`)
+
+- A compact “card” form with:
+  - Email input
+  - Password input
+  - Login button
+  - Link to Register
+
+#### Register (`/register`)
+
+- A matching “card” form with:
+  - Email input
+  - Password input
+  - Confirm password input
+  - Register button
+  - Link to Login
+
+#### Cart (`/cart`)
+
+- A list/table of cart items with:
+  - title, unit price, quantity input
+  - **Update** and **Remove** actions per line
+- An order summary area showing a subtotal and a clear **Checkout** button.
+
+#### Checkout (`/orders/checkout`)
+
+- A two-column layout:
+  - Left: shipping information inputs and a **Place order** button
+  - Right: an **order summary** (items, quantities, totals)
+
+#### Orders (`/orders`)
+
+- A list of previous orders (order IDs / timestamps), with the intention that an order can be expanded to show line items and totals.
+
+#### Admin analytics (`/admin/analytics`)
+
+- An admin-only dashboard screen with:
+  - KPI summary cards (sales, books, users, new orders)
+  - Category breakdown and top sellers
+  - Recent orders table
+  - A clear admin call-to-action: **Add new book**
+
+#### Admin add book (`/admin/books/new`)
+
+- A form layout for adding to the catalogue, including:
+  - title, author, category, price
+  - cover image selector
+  - description
+  - submit button
+
+#### Error pages (403 / 404)
+
+- **404**: a friendly “Page not found” message with buttons to return home or browse books.
+- **403**: a clear “Forbidden” message with a back-home action.
+
+---
+
