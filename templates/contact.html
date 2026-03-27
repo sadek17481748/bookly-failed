@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{# ============================================================ #}
+{# CONTACT PAGE                                                  #}
+{# - Simple static contact information page                       #}
+{# - No form submit; purely informational                          #}
+{# ============================================================ #}
+
+{% block title %}Contact • bookly{% endblock %}
+
+{% block content %}
+  {# ================= CONTACT CONTENT ================= #}
+  <div class="narrow">
+    {# Page title #}
+    <h1>Contact us</h1>
+
+    {# ================= CONTACT DETAILS CARD ================= #}
+    {# Static list; no form POST on this page #}
+    <section class="card">
+      <h2>Get in touch</h2>
+      <ul class="contact-list">
+        <li><strong>Email:</strong> <a href="mailto:contact@bookly.example">contact@bookly.example</a></li>
+        <li><strong>Phone:</strong> <a href="tel:+10000000000">+1 (000) 000-0000</a></li>
+      </ul>
+    </section>
+  </div>
+{% endblock %}
