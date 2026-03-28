@@ -33,3 +33,25 @@
 
       {# Description body #}
       <p>{{ book.description }}</p>
+
+      {# -------- Add to cart (only when logged in) -------- #}
+      {% if current_user.is_authenticated %}
+        {# Add-to-cart form (POST) #}
+        <form class="row" method="post" action="{{ url_for('cart.add_to_cart', book_id=book.id) }}">
+          {# Quantity field #}
+          <div class="field inline-field">
+            <label for="quantity">Qty</label>
+            <input id="quantity" name="quantity" type="number" min="1" value="1" />
+          </div>
+          {# Submit button #}
+          <button class="btn btn-secondary" type="submit">Add to cart</button>
+        </form>
+      {% else %}
+        {# Guest hint with login link (keeps return path) #}
+        <p class="hint">
+          <a href="{{ url_for('auth.login_form', next=request.path) }}">Login</a>
+          to add to cart and write reviews.
+        </p>
+      {% endif %}
+    </div>
+  </div>
