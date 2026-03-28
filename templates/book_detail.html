@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{# ============================================================ #}
+{# BOOK DETAIL PAGE                                              #}
+{# - Shows one book (cover, metadata, description)                #}
+{# - Add-to-cart (logged in)                                      #}
+{# - Reviews (create + list + owner edit/delete)                  #}
+{# ============================================================ #}
+
+{% block title %}{{ book.title }} • bookly{% endblock %}
+
+{% block content %}
+  {# ================= BOOK HEADER ================= #}
+  <div class="book-detail">
+    {# -------- Cover media -------- #}
+    <div class="book-media">
+      {% if book.cover_url %}
+        {# Cover image (SVG) #}
+        <img class="cover large" src="{{ book.cover_url }}" alt="Cover of {{ book.title }}" loading="lazy" />
+      {% else %}
+        {# Placeholder block when no cover is present #}
+        <div class="cover large placeholder" aria-hidden="true"></div>
+      {% endif %}
+    </div>
+
+    {# -------- Book information + actions -------- #}
+    <div class="book-info">
+      {# Title + metadata #}
+      <h1>{{ book.title }}</h1>
+      <p class="muted">by {{ book.author }}</p>
+      <p class="hint">{{ book.category }}</p>
+      <p class="price big">${{ book.price_dollars() }}</p>
+
+      {# Description body #}
+      <p>{{ book.description }}</p>
