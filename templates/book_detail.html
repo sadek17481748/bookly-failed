@@ -55,3 +55,42 @@
       {% endif %}
     </div>
   </div>
+
+  {# ================= REVIEWS SECTION ================= #}
+  <section class="section">
+    <h2>Reviews</h2>
+
+    {# -------- Write a review (only when logged in) -------- #}
+    {% if current_user.is_authenticated %}
+      {# Review creation form (POST) #}
+      <form class="card" method="post" action="{{ url_for('books.create_review', book_id=book.id) }}">
+        <h3>Write a review</h3>
+        {# Rating select #}
+        <div class="field">
+          <label for="rating">Rating (1–5)</label>
+          <select id="rating" name="rating" required>
+            <option value="5">5 - Excellent</option>
+            <option value="4">4 - Good</option>
+            <option value="3">3 - Okay</option>
+            <option value="2">2 - Not great</option>
+            <option value="1">1 - Poor</option>
+          </select>
+        </div>
+
+        {# Review text body #}
+        <div class="field">
+          <label for="body">Your review</label>
+          <textarea id="body" name="body" rows="4" required></textarea>
+        </div>
+
+        {# Submit button #}
+        <button class="btn" type="submit">Post review</button>
+      </form>
+    {% else %}
+      {# Guest hint for reviews #}
+      <p class="hint">
+        <a href="{{ url_for('auth.login_form', next=request.path) }}">Login</a>
+        to write a review.
+      </p>
+    {% endif %}
+
