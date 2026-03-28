@@ -25,3 +25,48 @@
     </form>
   </div>
 
+  {# ================= BOOK RESULTS ================= #}
+  {% if books|length == 0 %}
+    {# Empty state #}
+    <p>No books found.</p>
+  {% else %}
+    {# Responsive grid of book cards #}
+    <div class="grid three">
+      {% for book in books %}
+        {# ================= BOOK CARD ================= #}
+        <article class="card book-card">
+          {# -------- Cover image (SVG) or placeholder -------- #}
+          {% if book.cover_url %}
+            {# Book cover image #}
+            <img class="cover" src="{{ book.cover_url }}" alt="Cover of {{ book.title }}" loading="lazy" />
+          {% else %}
+            {# Placeholder block when no cover is present #}
+            <div class="cover placeholder" aria-hidden="true"></div>
+          {% endif %}
+
+          {# -------- Book summary content -------- #}
+          <h2 class="book-title">
+            {# Link to the book detail page #}
+            <a href="{{ url_for('books.book_detail', book_id=book.id) }}">{{ book.title }}</a>
+          </h2>
+          {# Author / category / price #}
+          <div class="muted">by {{ book.author }}</div>
+          <div class="hint">{{ book.category }}</div>
+          <div class="price">${{ book.price_dollars() }}</div>
+
+          {# -------- Add to cart (only when logged in) -------- #}
+          {% if current_user.is_authenticated %}
+            {# POST to add a single quantity line #}
+            <form method="post" action="{{ url_for('cart.add_to_cart', book_id=book.id) }}">
+              <input type="hidden" name="quantity" value="1" />
+              <button class="btn btn-secondary btn-small" type="submit">Add to cart</button>
+            </form>
+          {% else %}
+            {# Prompt for guests #}
+            <div class="hint">Login to add to cart.</div>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}
