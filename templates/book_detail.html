@@ -94,3 +94,55 @@
       </p>
     {% endif %}
 
+    {# -------- Review list / empty state -------- #}
+    {% if reviews|length == 0 %}
+      {# Empty state #}
+      <p>No reviews yet.</p>
+    {% else %}
+      {# Review cards stack #}
+      <div class="stack">
+        {% for review in reviews %}
+          {# ================= REVIEW CARD ================= #}
+          <article class="card">
+            {# Top row: author + timestamp + star rating #}
+            <div class="row between">
+              <div>
+                <strong>{{ review.user.email }}</strong>
+                <span class="muted">• {{ review.created_at.strftime("%Y-%m-%d %H:%M") }}</span>
+              </div>
+              {# Rating display (5-star visual) #}
+              <div class="rating" aria-label="Rating {{ review.rating }} out of 5">
+                {% for i in range(1, 6) %}
+                  {% if i <= review.rating %}
+                    <span aria-hidden="true">★</span>
+                  {% else %}
+                    <span class="muted" aria-hidden="true">★</span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+
+            {# Review content #}
+            <p class="review-body">{{ review.body }}</p>
+
+            {# -------- Owner actions: edit / delete -------- #}
+            {% if current_user.is_authenticated and review.user_id == current_user.id %}
+              <div class="row wrap">
+                {# Edit link #}
+                <a class="btn btn-small" href="{{ url_for('books.edit_review_form', book_id=book.id, review_id=review.id) }}">
+                  Edit
+                </a>
+                {# Delete form (POST) with JS confirm #}
+                <form method="post" action="{{ url_for('books.delete_review', book_id=book.id, review_id=review.id) }}">
+                  <button class="btn btn-danger btn-small" type="submit" data-confirm="Delete this review?">
+                    Delete
+                  </button>
+                </form>
+              </div>
+            {% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}
