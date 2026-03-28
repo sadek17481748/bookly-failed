@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{# ============================================================ #}
+{# BOOKS LIST PAGE                                               #}
+{# - Displays searchable catalogue cards                          #}
+{# - Allows quick add-to-cart for logged-in users                 #}
+{# ============================================================ #}
+
+{% block title %}Books • bookly{% endblock %}
+
+{% block content %}
+  {# ================= PAGE HEADER + SEARCH ================= #}
+  <div class="page-head">
+    {# Page heading #}
+    <h1>Books</h1>
+
+    {# Search form (GET keeps the page bookmarkable/shareable) #}
+    <form class="search" method="get" action="{{ url_for('books.list_books') }}">
+      {# Accessible label (visually hidden) #}
+      <label class="sr-only" for="q">Search books</label>
+      {# Search input persists the current query #}
+      <input id="q" name="q" type="search" placeholder="Search title or author..." value="{{ q }}" />
+      {# Submit button #}
+      <button class="btn btn-small" type="submit">Search</button>
+    </form>
+  </div>
+
