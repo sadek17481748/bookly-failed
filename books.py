@@ -41,3 +41,36 @@ def book_detail(book_id: int):
     )
     return render_template("book_detail.html", book=book, reviews=reviews)
 
+
+# ================= CREATE REVIEW (LOGIN REQUIRED) =================
+@books_bp.post("/<int:book_id>/reviews")
+@login_required
+def create_review(book_id: int):
+    # -------- Load book + read form values --------
+    book = Book.query.get_or_404(book_id)
+    rating_raw = request.form.get("rating") or ""
+    body = (request.form.get("body") or "").strip()
+
+    # -------- Validate rating is an integer 1–5 --------
+    try:
+        rating = int(rating_raw)
+    except ValueError:
+        rating = 0
+
+    if rating < 1 or rating > 5:
+        flash("Rating must be between 1 and 5.", "error")
+        return redirect(url_for("books.book_detail", book_id=book.id))
+
+    # -------- Validate review body is not empty --------
+    if not body:
+        flash("Review text is required.", "error")
+        return redirect(url_for("books.book_detail", book_id=book.id))
+
+    # -------- Insert review row linked to current user --------
+    review = Review(user_id=current_user.id, book_id=book.id, rating=rating, body=body)
+    db.session.add(review)
+    db.session.commit()
+
+    flash("Review posted!", "success")
+    return redirect(url_for("books.book_detail", book_id=book.id))
+
