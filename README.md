@@ -304,3 +304,123 @@ The PDF wireframe is intentionally low fidelity (boxes, labels, and simple compo
 
 ---
 
+## Website build process and planning (milestones)
+
+This section summarises **how bookly was built**, in the order features were implemented, and how the scope evolved as I worked through the coursework requirements.
+
+### Foundation completion — **28/03**
+
+I started by building the foundation so every later feature had a stable base:
+
+- **Project setup**: virtual environment, dependencies, and a clean Flask project structure.
+- **Configuration**: environment-based settings (`SECRET_KEY`, `DATABASE_URL`) so the same code could run locally and in a hosted environment. (AI)
+- **Database first**: a PostgreSQL schema that reflects the core entities and relationships (`users`, `books`, `reviews`, `cart_items`, `orders`, `order_items`) with sensible constraints (foreign keys and uniqueness where needed).
+- **Bootstrap commands and seed data**: a repeatable way to initialise the schema and seed a starter catalogue so pages were never “empty by default”. (AI)
+- **Shared UI shell**: `base.html` with navigation, flash messages, and consistent layout, plus a first pass of CSS variables and reusable components.
+
+The practical reason for doing this first was personal experience: once the database and layout are stable, every new page becomes “connect the route to the template to the query”, instead of reinventing structure on every screen.(AI)
+
+### Milestone 1 — **31/03** (public pages + shared layout)
+
+This milestone focused on getting the public-facing shell working end-to-end:
+
+- **Home** and **Contact** pages built against the wireframe.
+- A consistent navigation experience across pages (logged out experience first).
+- Early error pages (especially **403/404**) so the site behaved clearly while routes were still being added.
+
+### Milestone 2 — **05/04** (catalogue)
+
+Once the shell was working, I moved onto the first database-driven feature:
+
+- **Books list** (`/books`) populated from the database rather than static HTML.
+- **Book detail** (`/books/<id>`) with price, description, and cover rendering.
+- A simple **search** experience (`?q=`) to demonstrate database filtering.
+- Catalogue seeding and cover URLs so the UI looked complete and consistent.
+
+### Milestone 3 — **10/04** (authentication)
+
+At this point scope shifted from “pages” to “user actions”:
+
+- **Register / login / logout** implemented with hashed passwords and session management.
+- Navigation updated based on authentication state (cart/orders only appear when logged in).
+- Protected routes added so guest users are redirected away from actions that require an account.
+
+### Milestone 4 — **13/04** (reviews)
+
+Reviews were the first feature that required a mix of database relationships and security checks:
+
+- Logged-in users can **create** reviews linked by foreign keys to both the user and the book.
+- Reviews display on the book detail page.
+- **Edit and delete** are restricted to the review owner with server-side checks (not only template logic).
+
+### Milestone 5 — **16/04** (cart)
+
+The cart is implemented as a database feature (not a session-only cart), which made scope and data modelling more important:
+
+- Add-to-cart writes to `cart_items` and merges quantity using a uniqueness rule for one row per (user, book).
+- The cart page supports quantity updates and removals with totals calculated from book prices.
+- Edge cases handled (empty cart, invalid quantities) so the checkout flow would not be fragile later.
+
+### Milestone 6 — **20/04** (checkout + orders)
+
+This milestone turned “basket data” into “transaction history”:
+
+- Checkout form added (minimal shipping/contact fields for coursework realism).
+- Submitting checkout creates an `orders` row and multiple `order_items` rows, then clears the cart for that user.
+- Orders history added so users can view what they purchased after checkout.
+
+### Milestone 7 — **25/04** (admin analytics + final integration)
+
+Admin analytics was the last major feature because it depends on the rest of the data model being correct:
+
+- Admin-only route protection with a clear **403** for non-admin users.
+- Dashboard queries based on aggregates and joins (revenue, order counts, top books, categories).
+- A final integration pass to make flows consistent (navigation, flash messaging, and layout across templates).
+
+### Testing and final foundation pass — **25/04**
+
+Testing was completed alongside feature work, but the final day was a dedicated pass to make sure everything was coherent:
+
+- **Automated testing**: pytest suite for key routes and behaviours using a fast in-memory database for repeatable runs.
+- **Manual testing**: end-to-end walkthroughs on PostgreSQL (browse → auth → review → cart → checkout → orders), plus admin access checks.
+- **Scope reflection**: the largest scope risks were multi-table writes (checkout) and role/ownership enforcement (reviews + admin). Those were the areas I revisited most during the final testing pass because they are easiest to “seem fine” until you try edge cases.
+
+### Personal reflection (time constraints and improved time/communication plan)
+
+From personal experience, project time constraints can change quickly. During this project I was **heavily delayed by personal issues**, which reduced the amount of uninterrupted time I had for development and testing. Even though the core features were completed, the delay meant I had to compress work into fewer sessions, which increases the risk of mistakes and makes progress harder to track.
+
+In future projects, to manage my time and communication better, I would take the following steps.
+
+#### What I would do differently next time
+
+- **Start with a realistic schedule and visible checkpoints**
+  - Break the project into small deliverables (foundation, catalogue, auth, reviews, cart, checkout, admin, testing).
+  - Set short checkpoints (every 2–3 days) so progress is measurable even when time is limited.
+- **Timebox work sessions and protect “core hours”**
+  - Plan focused sessions (for example 60–90 minutes) with a single goal (one route, one feature, or one bug).
+  - Reserve dedicated time for testing and bug fixing rather than leaving it to the end.
+- **Prioritise core functionality first (MVP first)**
+  - Build the “must-have” user journey early: browse → login → cart → checkout → orders.
+  - Treat admin analytics and extra polish as optional until the main flow is stable.
+- **Track decisions and changes as I go**
+  - Keep short notes after each session (what was done, what broke, what is next).
+  - Record database changes and why they were made so I do not lose time re-learning decisions later.
+- **Communicate earlier when delays happen**
+  - If I hit a personal issue or a schedule slip, I would communicate it earlier rather than trying to recover silently.
+  - Share a revised plan (what will be completed first, and what may be reduced) so expectations stay clear.
+- **Reduce risk by testing continuously**
+  - Run automated tests regularly (not only at the end).
+  - Do quick manual checks after each major feature (especially multi-table writes like checkout and role/ownership rules).
+
+#### What I learned
+
+This project reinforced that the biggest risk under time pressure is not writing code—it is losing structure: forgetting what changed, delaying testing, and trying to complete too many features at once. A clearer schedule, earlier communication, and smaller planned deliverables would make future projects more controlled and less stressful, even if delays happen.
+
+#### Planned but not completed (time constraint)
+
+Late in development, I planned a small admin improvement: a **“Complete order”** button on the admin side (so an admin could mark an order as completed after checkout). The idea came from watching extra e-commerce tutorials and thinking about how a real store would track order status, but I did not have enough time to implement it properly before submission.
+
+In a future iteration, I would add an `order_status` field (for example: Pending → Completed), show it on the admin dashboard, and only allow status changes for admin users with server-side validation. (AI)
+
+---
+
