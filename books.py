@@ -29,3 +29,15 @@ def list_books():
     books = query.order_by(Book.created_at.desc()).all()
     return render_template("books.html", books=books, q=q)
 
+
+# ================= BOOK DETAIL + REVIEW LIST =================
+@books_bp.get("/<int:book_id>")
+def book_detail(book_id: int):
+    book = Book.query.get_or_404(book_id)
+    reviews = (
+        Review.query.filter_by(book_id=book_id)
+        .order_by(Review.created_at.desc())
+        .all()
+    )
+    return render_template("book_detail.html", book=book, reviews=reviews)
+
