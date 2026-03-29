@@ -23,7 +23,8 @@ def list_books():
     q = (request.args.get("q") or "").strip()
     query = Book.query
     if q:
-        query = query.filter((Book.title.contains(q)) | (Book.author.contains(q)))
+        like = f"%{q}%"
+        query = query.filter((Book.title.ilike(like)) | (Book.author.ilike(like)))
 
     books = query.order_by(Book.created_at.desc()).all()
     return render_template("books.html", books=books, q=q)
