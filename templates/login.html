@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{# ============================================================ #}
+{# LOGIN PAGE                                                    #}
+{# - Authenticates an existing user                              #}
+{# - Preserves `next` for redirect after login                   #}
+{# ============================================================ #}
+
+{% block title %}Login • bookly{% endblock %}
+
+{% block content %}
+  {# ================= LOGIN CARD ================= #}
+  <div class="narrow">
+    {# Page title #}
+    <h1>Login</h1>
+
+    {# ================= LOGIN FORM ================= #}
+    {# POST to login_submit; `next` query string preserved for redirect after login #}
+    <form method="post" action="{{ url_for('auth.login_submit') }}">
+      {# Email field #}
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required />
+      </div>
+
+      {# Password field #}
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required />
+      </div>
+
+      {# Submit button #}
+      <button class="btn" type="submit">Login</button>
+    </form>
+
+    {# ================= SECONDARY LINK ================= #}
+    <p class="muted">
+      Don’t have an account?
+      <a href="{{ url_for('auth.register_form') }}">Register</a>
+    </p>
+  </div>
+{% endblock %}
