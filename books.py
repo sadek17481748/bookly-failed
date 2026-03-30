@@ -94,3 +94,19 @@ def delete_review(book_id: int, review_id: int):
     flash("Review deleted.", "success")
     return redirect(url_for("books.book_detail", book_id=book_id))
 
+
+# ================= EDIT REVIEW (OWNER ONLY) =================
+# Form page + POST handler.
+@books_bp.get("/<int:book_id>/reviews/<int:review_id>/edit")
+@login_required
+def edit_review_form(book_id: int, review_id: int):
+    review = Review.query.filter_by(id=review_id, book_id=book_id).first_or_404()
+
+    # -------- Ownership check (server-side) --------
+    if review.user_id != current_user.id:
+        flash("You can only edit your own reviews.", "error")
+        return redirect(url_for("books.book_detail", book_id=book_id))
+
+    book = Book.query.get_or_404(book_id)
+    return render_template("edit_review.html", book=book, review=review)
+
