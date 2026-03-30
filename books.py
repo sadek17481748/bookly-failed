@@ -82,6 +82,11 @@ def delete_review(book_id: int, review_id: int):
     # -------- Fetch review scoped to the book --------
     review = Review.query.filter_by(id=review_id, book_id=book_id).first_or_404()
 
+    # -------- Ownership check (server-side) --------
+    if review.user_id != current_user.id:
+        flash("You can only delete your own reviews.", "error")
+        return redirect(url_for("books.book_detail", book_id=book_id))
+
     # -------- Delete row and save --------
     db.session.delete(review)
     db.session.commit()
