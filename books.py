@@ -74,3 +74,18 @@ def create_review(book_id: int):
     flash("Review posted!", "success")
     return redirect(url_for("books.book_detail", book_id=book.id))
 
+
+# ================= DELETE REVIEW (OWNER ONLY) =================
+@books_bp.post("/<int:book_id>/reviews/<int:review_id>/delete")
+@login_required
+def delete_review(book_id: int, review_id: int):
+    # -------- Fetch review scoped to the book --------
+    review = Review.query.filter_by(id=review_id, book_id=book_id).first_or_404()
+
+    # -------- Delete row and save --------
+    db.session.delete(review)
+    db.session.commit()
+
+    flash("Review deleted.", "success")
+    return redirect(url_for("books.book_detail", book_id=book_id))
+
