@@ -16,7 +16,7 @@
 
     {# ================= LOGIN FORM ================= #}
     {# POST to login_submit; `next` query string preserved for redirect after login #}
-    <form method="post" action="{{ url_for('auth.login_submit') }}">
+    <form method="post" action="{{ url_for('auth.login_submit', next=request.args.get('next')) }}">
       {# Email field #}
       <div class="field">
         <label for="email">Email</label>

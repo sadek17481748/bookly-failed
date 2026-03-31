@@ -75,7 +75,8 @@ def login_submit():
     # -------- Start session and redirect --------
     login_user(user)
     flash("You are now logged in.", "success")
-    return redirect(url_for("books.list_books"))
+    next_url = request.args.get("next")  # optional return URL after login
+    return redirect(next_url or url_for("books.list_books"))
 
 
 @auth_bp.post("/logout")
