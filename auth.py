@@ -53,3 +53,8 @@ def register_submit():
     flash("Welcome! Your account was created.", "success")
     return redirect(url_for("books.list_books"))
 
+
+# ================= LOGIN / LOGOUT =================
+@auth_bp.get("/login")
+def login_form():
+    return render_template("login.html")
