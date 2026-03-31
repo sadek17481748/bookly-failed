@@ -58,3 +58,30 @@ def register_submit():
 @auth_bp.get("/login")
 def login_form():
     return render_template("login.html")
+
+
+@auth_bp.post("/login")
+def login_submit():
+    # -------- Read and normalise form inputs --------
+    email = (request.form.get("email") or "").strip().lower()
+    password = request.form.get("password") or ""
+
+    # -------- Lookup user and verify password --------
+    user = User.query.filter_by(email=email).first()
+    if user is None or not user.check_password(password):
+        flash("Invalid email or password.", "error")
+        return redirect(url_for("auth.login_form"))
+
+    # -------- Start session and redirect --------
+    login_user(user)
+    flash("You are now logged in.", "success")
+    return redirect(url_for("books.list_books"))
+
+
+@auth_bp.post("/logout")
+@login_required
+def logout():
+    # -------- End session and redirect --------
+    logout_user()
+    flash("Logged out.", "success")
+    return redirect(url_for("home"))
