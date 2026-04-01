@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{# ============================================================ #}
+{# EDIT REVIEW PAGE                                               #}
+{# - Allows a review owner to update rating/body                  #}
+{# - Server-side ownership checks happen in the route             #}
+{# ============================================================ #}
+
+{% block title %}Edit review • {{ book.title }} • bookly{% endblock %}
+
+{% block content %}
+  {# ================= EDIT REVIEW CARD ================= #}
+  <div class="narrow">
+    {# Page title #}
+    <h1>Edit your review</h1>
+    {# Link back to the relevant book detail page #}
+    <p class="muted">
+      Book:
+      <a href="{{ url_for('books.book_detail', book_id=book.id) }}">{{ book.title }}</a>
+    </p>
+
+    {# ================= EDIT REVIEW FORM ================= #}
+    {# POST updates this review id (owner check is server-side) #}
+    <form class="card" method="post" action="{{ url_for('books.edit_review_submit', book_id=book.id, review_id=review.id) }}">
+      {# Rating selector #}
+      <div class="field">
+        <label for="rating">Rating (1–5)</label>
+        <select id="rating" name="rating" required>
+          {% for i in range(5, 0, -1) %}
+            <option value="{{ i }}" {% if review.rating == i %}selected{% endif %}>
+              {{ i }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      {# Review body text #}
+      <div class="field">
+        <label for="body">Your review</label>
+        <textarea id="body" name="body" rows="5" required>{{ review.body }}</textarea>
+      </div>
+
+      {# Primary/secondary actions #}
+      <div class="row wrap">
+        <button class="btn" type="submit">Save changes</button>
+        <a class="btn btn-secondary" href="{{ url_for('books.book_detail', book_id=book.id) }}">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}
