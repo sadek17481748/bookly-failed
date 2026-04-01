@@ -424,3 +424,40 @@ In a future iteration, I would add an `order_status` field (for example: Pending
 
 ---
 
+## Design
+
+### Visual language
+
+- **Dark theme** with CSS variables (`--bg`, `--panel`, `--text`, `--brand`, `--danger`, etc.) in `static/css/styles.css` for consistent colour and spacing.
+- **Gradients** on hero and buttons for depth; **cards** with subtle borders and shadows for content grouping.
+- **Typography:** system UI stack (`ui-sans-serif`, `system-ui`, …) for fast loading and native feel.
+
+### Colour scheme (and why)
+
+The site uses a **dark, high-contrast** palette to keep long reading sessions comfortable and to make book covers and cards stand out clearly.
+
+- **Background (`--bg`)**: deep navy used as the base canvas so content panels feel separated without heavy borders.
+- **Panels (`--panel`)**: slightly lighter navy for cards and sections to create depth while staying consistent with the dark theme.
+- **Text (`--text`) + muted text (`--muted`)**: bright off-white for readability, with a muted variant for secondary information (author names, timestamps, hints).
+- **Primary brand (`--brand`)**: purple accent for primary actions and key highlights (buttons, links) to give the UI a recognisable identity.
+- **Secondary accent (`--brand2`)**: green accent used sparingly to add contrast in gradients and to avoid a single-colour interface.
+- **Danger (`--danger`)**: pink/red accent reserved for destructive actions (delete/remove) so risk actions are visually obvious.
+
+These choices are implemented as CSS variables at the top of `static/css/styles.css` so the palette is consistent across the whole site and easy to adjust in one place.
+
+### Layout
+
+- **Max content width** (`--max`) with horizontal padding so lines do not stretch too wide on large monitors.
+- **CSS Grid** for book grids (two/three columns, collapsing on small viewports).
+- **Admin dashboard:** stat tiles + scrollable table for “top books”.
+
+### Imagery
+
+- **Covers:** SVG files under `static/img/covers/` (title + author on gradient) to avoid copyright issues with publisher jacket scans while still filling the layout.
+
+### Accessibility choices
+
+- Skip link, `aria-live` on flash stack, `aria-label` / `aria-expanded` where applicable, visible focus on skip link.
+
+---
+
