@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{# ============================================================ #}
+{# CART PAGE                                                     #}
+{# - Lists cart line items for the logged-in user                #}
+{# - Allows quantity updates and line removal                    #}
+{# - Shows subtotal and checkout action                          #}
+{# ============================================================ #}
+
+{% block title %}Cart • bookly{% endblock %}
+
+{% block content %}
+  {# ================= PAGE HEADER ================= #}
+  <h1>Your cart</h1>
+
+  {# ================= CART CONTENT ================= #}
+  {% if items|length == 0 %}
+    {# Empty cart state #}
+    <p>Your cart is empty. <a href="{{ url_for('books.list_books') }}">Browse books</a>.</p>
+  {% else %}
+    {# Line items list #}
+    <div class="stack">
+      {% for item in items %}
+        {# ================= CART ITEM CARD ================= #}
+        <div class="card row between wrap">
+          {# -------- Book info -------- #}
+          <div>
+            <div><strong>{{ item.book.title }}</strong></div>
+            <div class="muted">by {{ item.book.author }}</div>
+            <div class="muted">${{ item.book.price_dollars() }} each</div>
+          </div>
+
+          {# -------- Line actions (update / remove) -------- #}
+          <div class="row wrap">
+            {# Quantity update form (POST) #}
+            <form class="row" method="post" action="{{ url_for('cart.update_quantity', item_id=item.id) }}">
+              <label class="sr-only" for="qty-{{ item.id }}">Quantity</label>
+              <input id="qty-{{ item.id }}" name="quantity" type="number" min="1" value="{{ item.quantity }}" />
+              <button class="btn btn-small" type="submit">Update</button>
+            </form>
+
+            {# Remove line form (POST) with JS confirm #}
+            <form method="post" action="{{ url_for('cart.remove_item', item_id=item.id) }}">
+              <button class="btn btn-danger btn-small" type="submit" data-confirm="Remove this item from cart?">
+                Remove
+              </button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    {# Subtotal row #}
+    <div class="card row between">
+      <div><strong>Subtotal</strong></div>
+      <div><strong>${{ "%.2f"|format(subtotal_cents / 100) }}</strong></div>
+    </div>
+
+    {# Checkout CTA #}
+    <a class="btn" href="{{ url_for('orders.checkout_form') }}">Checkout</a>
+  {% endif %}
+{% endblock %}
