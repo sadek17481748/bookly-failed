@@ -97,3 +97,14 @@ def update_quantity(item_id: int):
     flash("Cart updated.", "success")
     return redirect(url_for("cart.view_cart"))
 
+
+# ================= REMOVE ITEM (LOGIN REQUIRED) =================
+@cart_bp.post("/remove/<int:item_id>")
+@login_required
+def remove_item(item_id: int):
+    # -------- Fetch and delete the cart row --------
+    item = CartItem.query.filter_by(id=item_id, user_id=current_user.id).first_or_404()
+    db.session.delete(item)
+    db.session.commit()
+    flash("Removed from cart.", "success")
+    return redirect(url_for("cart.view_cart"))
