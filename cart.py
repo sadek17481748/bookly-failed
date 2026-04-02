@@ -71,3 +71,29 @@ def add_to_cart(book_id: int):
     flash(f"Added to cart: {book.title}", "success")
     return redirect(url_for("cart.view_cart"))
 
+
+# ================= UPDATE QUANTITY (LOGIN REQUIRED) =================
+# Quantity < 1 removes the row.
+@cart_bp.post("/update/<int:item_id>")
+@login_required
+def update_quantity(item_id: int):
+    # -------- Fetch the cart row scoped to the current user --------
+    item = CartItem.query.filter_by(id=item_id, user_id=current_user.id).first_or_404()
+    qty_raw = request.form.get("quantity") or "1"
+
+    try:
+        qty = int(qty_raw)
+    except ValueError:
+        qty = 1
+
+    # -------- Apply update or delete --------
+    if qty < 1:
+        db.session.delete(item)
+    else:
+        item.quantity = qty
+
+    # -------- Save and redirect --------
+    db.session.commit()
+    flash("Cart updated.", "success")
+    return redirect(url_for("cart.view_cart"))
+
