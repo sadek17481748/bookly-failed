@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{# ============================================================ #}
+{# CHECKOUT PAGE                                                  #}
+{# - Collects shipping information                                #}
+{# - Shows a read-only summary of the current cart                 #}
+{# - Submits an order creation request (no payment gateway)        #}
+{# ============================================================ #}
+
+{% block title %}Checkout • bookly{% endblock %}
+
+{% block content %}
+  {# ================= PAGE HEADER ================= #}
+  <h1>Checkout</h1>
+
+  {# ================= EMPTY STATE / CHECKOUT FORM ================= #}
+  {% if items|length == 0 %}
+    {# Empty cart state #}
+    <p>Your cart is empty. <a href="{{ url_for('books.list_books') }}">Browse books</a>.</p>
+  {% else %}
+    {# Two-column layout: shipping form + order summary #}
+    <div class="grid two">
+      {# ================= LEFT: SHIPPING FORM ================= #}
+      <section class="card">
+        <h2>Shipping info</h2>
+        {# Order submit form (POST) #}
+        <form method="post" action="{{ url_for('orders.checkout_submit') }}">
+          <div class="field">
+            <label for="full_name">Full name</label>
+            <input id="full_name" name="full_name" type="text" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="address">Address</label>
+            <textarea id="address" name="address" rows="3" autocomplete="street-address" required></textarea>
+          </div>
+          {# Confirm attribute triggers a JS prompt (progressive enhancement) #}
+          <button class="btn" type="submit" data-confirm="Place order?">Place order</button>
+        </form>
+        {# Coursework note: no payments processed #}
+        <p class="hint">
+          No card payment is processed here. The order is stored in the database only.
+        </p>
+      </section>
+
+      {# ================= RIGHT: ORDER SUMMARY ================= #}
+      <section class="card">
+        <h2>Order summary</h2>
+        {# Summary list with per-line totals #}
+        <ul class="summary">
+          {% for item in items %}
+            <li>
+              <span>{{ item.book.title }} × {{ item.quantity }}</span>
+              <span>${{ "%.2f"|format((item.book.price_cents * item.quantity) / 100) }}</span>
+            </li>
+          {% endfor %}
+          {# Grand total row #}
+          <li class="total">
+            <span>Total</span>
+            <span>${{ "%.2f"|format(subtotal_cents / 100) }}</span>
+          </li>
+        </ul>
+      </section>
+    </div>
+  {% endif %}
+{% endblock %}
