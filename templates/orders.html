@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{# ============================================================ #}
+{# ORDERS PAGE                                                   #}
+{# - Lists past orders for the logged-in user                    #}
+{# - Shows totals and line items                                 #}
+{# ============================================================ #}
+
+{% block title %}Orders • bookly{% endblock %}
+
+{% block content %}
+  {# ================= PAGE HEADER ================= #}
+  <h1>Your orders</h1>
+
+  {# ================= ORDER LIST ================= #}
+  {# Each order: id, date, total, then nested line items #}
+  {% if orders|length == 0 %}
+    {# Empty state #}
+    <p>You have no orders yet. <a href="{{ url_for('books.list_books') }}">Browse books</a>.</p>
+  {% else %}
+    {# Order cards stack #}
+    <div class="stack">
+      {% for order in orders %}
+        {# ================= ORDER CARD ================= #}
+        <article class="card">
+          {# Top row: order id/date + total #}
+          <div class="row between wrap">
+            <div>
+              <strong>Order #{{ order.id }}</strong>
+              <div class="muted">{{ order.created_at.strftime("%Y-%m-%d %H:%M") }}</div>
+            </div>
+            <div>
+              <strong>${{ "%.2f"|format(order.total_cents / 100) }}</strong>
+            </div>
+          </div>
+
+          {# Line items summary list #}
+          <ul class="summary">
+            {% for item in order.items %}
+              <li>
+                <span>{{ item.book.title }} × {{ item.quantity }}</span>
+                <span>${{ "%.2f"|format((item.unit_price_cents * item.quantity) / 100) }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </article>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}
