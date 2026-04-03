@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{# ============================================================ #}
+{# ADMIN ANALYTICS DASHBOARD                                     #}
+{# - Admin-only reporting page                                   #}
+{# - Uses database aggregates and joins                           #}
+{# - Shows KPIs, category breakdown, top sellers, recent orders   #}
+{# ============================================================ #}
+
+{% block title %}Analytics • Admin • bookly{% endblock %}
+
+{% block content %}
+  {# ================= PAGE HEADER ================= #}
+  <div class="page-head">
+    <h1>Analytics dashboard</h1>
+    <div class="row wrap">
+      <div class="muted">Admin only</div>
+      <a class="btn btn-small btn-secondary" href="{{ url_for('admin.new_book_form') }}">Add book</a>
+    </div>
+  </div>
+
+  {# ================= ROW 1: KPI SUMMARY ================= #}
+  {# Revenue / orders / average order size #}
+  <section class="grid three">
+    <div class="card">
+      <div class="stat-label">Total revenue</div>
+      <div class="stat-value">${{ "%.2f"|format(revenue_cents / 100) }}</div>
+      <div class="hint">All-time revenue from completed checkouts</div>
+    </div>
+    <div class="card">
+      <div class="stat-label">Total orders</div>
+      <div class="stat-value">{{ total_orders }}</div>
+      <div class="hint">All-time orders</div>
+    </div>
+    <div class="card">
+      <div class="stat-label">Average order</div>
+      <div class="stat-value">${{ "%.2f"|format(avg_order_cents / 100) }}</div>
+      <div class="hint">Revenue / orders</div>
+    </div>
+  </section>
+
+  {# ================= ROW 2: PLATFORM COUNTS ================= #}
+  {# Users, reviews, category breakdown #}
+  <section class="grid three">
+    <div class="card">
+      <div class="stat-label">Total users</div>
+      <div class="stat-value">{{ total_users }}</div>
+    </div>
+    <div class="card">
+      <div class="stat-label">Total reviews</div>
+      <div class="stat-value">{{ total_reviews }}</div>
+    </div>
+    <div class="card">
+      <div class="stat-label">Books by category</div>
+      <ul class="mini-list">
+        {% for category, count in books_by_category %}
+          <li><span>{{ category }}</span><span class="muted">{{ count }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+  {# ================= ROW 3: SALES DETAIL ================= #}
+  {# Top sellers table + recent order list #}
+  <section class="grid two">
+    <div class="card">
+      <h2>Top-selling books</h2>
+      {% if top_books|length == 0 %}
+        <p class="muted">No purchases yet.</p>
+      {% else %}
+        {# Scroll wrapper for wide tables on mobile #}
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Book</th>
+                <th>Category</th>
+                <th class="right">Qty sold</th>
+                <th class="right">Sales</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for _id, title, author, category, qty, sales_cents in top_books %}
+                <tr>
+                  <td>
+                    <div><strong>{{ title }}</strong></div>
+                    <div class="muted">{{ author }}</div>
+                  </td>
+                  <td>{{ category }}</td>
+                  <td class="right">{{ qty }}</td>
+                  <td class="right">${{ "%.2f"|format(sales_cents / 100) }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h2>Recent orders</h2>
+      {% if recent_orders|length == 0 %}
+        <p class="muted">No orders yet.</p>
+      {% else %}
+        {# Most recent orders list #}
+        <ul class="mini-list">
+          {% for order in recent_orders %}
+            <li>
+              <span>#{{ order.id }} • {{ order.created_at.strftime("%Y-%m-%d %H:%M") }}</span>
+              <span>${{ "%.2f"|format(order.total_cents / 100) }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <p class="hint">Numbers update when customers complete checkout.</p>
+    </div>
+  </section>
+{% endblock %}
