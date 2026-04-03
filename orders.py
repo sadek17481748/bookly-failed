@@ -48,6 +48,10 @@ def checkout_form():
 def checkout_submit():
     # -------- Load cart rows --------
     items = CartItem.query.filter_by(user_id=current_user.id).all()
+    if not items:
+        flash("Your cart is empty.", "error")
+        return redirect(url_for("cart.view_cart"))
+
     # -------- Read shipping fields --------
     full_name = (request.form.get("full_name") or "").strip()
     address = (request.form.get("address") or "").strip()
