@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{# ============================================================ #}
+{# ADMIN: ADD BOOK                                               #}
+{# - Admin-only form for adding a new book to the catalogue       #}
+{# - Allows selecting a cover image from static assets            #}
+{# ============================================================ #}
+
+{% block title %}Add book • Admin • bookly{% endblock %}
+
+{% block content %}
+  {# ================= PAGE HEADER ================= #}
+  <div class="page-head">
+    <h1>Add a new book</h1>
+    <div class="muted">Admin only</div>
+  </div>
+
+  {# ================= ADD BOOK FORM ================= #}
+  <div class="narrow">
+    <form class="card" method="post" action="{{ url_for('admin.new_book_submit') }}">
+      <div class="field">
+        <label for="title">Title</label>
+        <input id="title" name="title" type="text" required />
+      </div>
+
+      <div class="field">
+        <label for="author">Author</label>
+        <input id="author" name="author" type="text" required />
+      </div>
+
+      <div class="field">
+        <label for="category">Category</label>
+        <input id="category" name="category" type="text" list="categoryList" placeholder="e.g. Mystery / Thriller" />
+        <datalist id="categoryList">
+          {% for c in existing_categories %}
+            <option value="{{ c }}"></option>
+          {% endfor %}
+        </datalist>
+        <div class="hint">Start typing to reuse existing categories (optional).</div>
+      </div>
+
+      <div class="field">
+        <label for="price">Price (GBP)</label>
+        <input id="price" name="price" type="text" inputmode="decimal" placeholder="e.g. 12.99" required />
+      </div>
+
+      <div class="field">
+        <label for="cover_filename">Cover image</label>
+        <select id="cover_filename" name="cover_filename">
+          <option value="">No cover (placeholder)</option>
+          {% for f in cover_files %}
+            <option value="{{ f }}">{{ f }}</option>
+          {% endfor %}
+        </select>
+        <div class="hint">Covers come from <code>static/img/covers/</code>.</div>
+      </div>
+
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="5" placeholder="Short description (optional)"></textarea>
+      </div>
+
+      <div class="row between wrap">
+        <a class="btn btn-secondary" href="{{ url_for('admin.analytics_dashboard') }}">Back to analytics</a>
+        <button class="btn" type="submit">Add book</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+
