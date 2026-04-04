@@ -461,3 +461,38 @@ These choices are implemented as CSS variables at the top of `static/css/styles.
 
 ---
 
+## Technologies Used
+
+### Languages
+
+- **Python** — application logic, ORM, routing.
+- **HTML** — structure via Jinja2 templates.
+- **CSS** — layout and theme.
+- **JavaScript** — small client behaviours only.
+
+### Frameworks & libraries
+
+| Piece | Role |
+|-------|------|
+| **Flask** | Web framework, routing, templates |
+| **Flask-Login** | Session-based authentication |
+| **Flask-SQLAlchemy** | ORM + session management to PostgreSQL |
+| **psycopg2** (binary) | PostgreSQL driver in `DATABASE_URL` |
+| **python-dotenv** | Load `.env` locally |
+| **gunicorn** | Production WSGI server (Heroku `Procfile`) |
+| **pytest** | Automated tests (`tests/`) |
+
+**Frontend libraries note:** No UI framework such as **Bootstrap** was used. The UI is custom CSS in `static/css/styles.css` and a small amount of vanilla JavaScript in `static/js/main.js` (no jQuery).
+
+### Tools
+
+| Tool | Used for |
+|------|----------|
+| **Git** | Version control |
+| **PostgreSQL / psql** | Local database, ad-hoc SQL checks |
+| **VS Code** | Editing and integrated terminal |
+| **Heroku CLI** | Deploy, logs, `heroku run` for `init-db` |
+| **Chrome DevTools** | Network tab, responsive mode, Lighthouse |
+
+---
+
