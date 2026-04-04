@@ -20,10 +20,15 @@ admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
 
 def admin_required(view_func):
-    # ================= ADMIN DECORATOR (login only — tightened later) =================
+    # ================= ADMIN-ONLY DECORATOR =================
+    # Wraps a view so only logged-in users with is_admin=True can open it.
+
     @wraps(view_func)
     @login_required
     def wrapper(*args, **kwargs):
+        # Reject non-admin users with a 403 page.
+        if not getattr(current_user, "is_admin", False):
+            abort(403)
         return view_func(*args, **kwargs)
 
     return wrapper
