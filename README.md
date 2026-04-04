@@ -496,3 +496,43 @@ These choices are implemented as CSS variables at the top of `static/css/styles.
 
 ---
 
+## File Structure
+
+> Paths are relative to the project root (`bookly-final/`).
+
+| Path | Description |
+|------|-------------|
+| `app.py` | Flask app factory, extensions, blueprint registration, `/`, `/contact`, 403 handler |
+| `book_covers.py` | Slug + `/static/img/covers/...` URL helper for seeded covers |
+| `config.py` | `SECRET_KEY`, `DATABASE_URL`, SQLAlchemy flags from environment |
+| `db.py` | Shared SQLAlchemy `db` instance |
+| `models.py` | ORM models (users, books, reviews, cart, orders) |
+| `auth.py` | Register / login / logout blueprint |
+| `books.py` | Catalog, detail, review CRUD blueprint |
+| `cart.py` | Cart blueprint |
+| `orders.py` | Orders + checkout blueprint |
+| `admin.py` | Admin analytics blueprint + `admin_required` decorator |
+| `cli.py` | `flask init-db`, `reset-db`, `make-admin`; seeds books and back-fills `cover_url` values |
+| `templates/` | Jinja2 HTML (includes admin pages) |
+| `templates/admin_add_book.html` | Admin-only “Add book” form (category + cover selection) |
+| `static/css/styles.css` | Site styles |
+| `static/js/main.js` | Nav toggle + confirm helper |
+| `static/img/covers/` | Cover assets used by the catalogue (SVG placeholders + any added raster covers) |
+| `schema.sql` | Reference DDL for PostgreSQL |
+| `seed_books.sql` | Optional bulk SQL seed (includes `cover_url` paths) |
+| `tests/` | Pytest suite + `conftest.py` (in-memory SQLite for CI speed) |
+| `pytest.ini` | Pytest discovery settings |
+| `requirements.txt` | Python dependencies |
+| `Procfile` / `runtime.txt` | Heroku process + Python version |
+| `.env.example` | Documents required env vars (no secrets) |
+| `.gitignore` | Ignores `.env`, `.venv`, `__pycache__`, etc. |
+| `docs/devlog.md` | (Removed) dev notes were merged into `README.md` |
+| `docs/testing.md` | (Removed) testing notes were merged into `README.md` |
+| `docs/legacy-code.md` | Small “before → after” code snapshots for assessor review |
+| `docs/wireframe-bookly.pdf` | Wireframes (PDF) for main screens and flows |
+| `docs/images/manual-testing/` | Manual testing evidence screenshots used in the testing table |
+| `docs/images/validation/` | Evidence screenshots (Lighthouse, W3C validators, JSHint, responsiveness, 404) |
+| `tools/` | One-off helper scripts used during development (not part of the running app) |
+
+---
+
