@@ -124,3 +124,69 @@ def new_book_form():
         existing_categories=existing_categories,
     )
 
+
+@admin_bp.post("/books/new")
+@admin_required
+def new_book_submit():
+    title = (request.form.get("title") or "").strip()
+    author = (request.form.get("author") or "").strip()
+    category = (request.form.get("category") or "").strip() or "Uncategorized"
+    description = (request.form.get("description") or "").strip()
+    price_raw = (request.form.get("price") or "").strip()
+    cover_filename = (request.form.get("cover_filename") or "").strip()
+
+    # -------- Validate required fields --------
+    errors: list[str] = []
+    if not title:
+        errors.append("Title is required.")
+    if not author:
+        errors.append("Author is required.")
+    if not price_raw:
+        errors.append("Price is required.")
+
+    # -------- Parse price into cents (e.g. 12.99 -> 1299) --------
+    price_cents = 0
+    if price_raw:
+        try:
+            price_float = float(price_raw)
+            price_cents = int(round(price_float * 100))
+        except ValueError:
+            errors.append("Price must be a number (e.g. 12.99).")
+
+    if price_cents <= 0:
+        errors.append("Price must be greater than 0.")
+
+    # -------- Optional cover selection --------
+    cover_url = None
+    if cover_filename:
+        covers_dir = Path(__file__).resolve().parent / "static" / "img" / "covers"
+        chosen = covers_dir / cover_filename
+        if not chosen.exists():
+            errors.append("Selected cover image does not exist.")
+        else:
+            cover_url = f"/static/img/covers/{cover_filename}"
+
+    # -------- Duplicate prevention (title + author) --------
+    if title and author:
+        existing = Book.query.filter_by(title=title, author=author).first()
+        if existing is not None:
+            errors.append("That book already exists in the catalogue.")
+
+    if errors:
+        for msg in errors:
+            flash(msg, "error")
+        return redirect(url_for("admin.new_book_form"))
+
+    book = Book(
+        title=title,
+        author=author,
+        category=category,
+        price_cents=price_cents,
+        description=description,
+        cover_url=cover_url,
+    )
+    db.session.add(book)
+    db.session.commit()
+
+    flash("Book added to catalogue.", "success")
+    return redirect(url_for("books.book_detail", book_id=book.id))
