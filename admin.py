@@ -94,3 +94,33 @@ def analytics_dashboard():
         top_books=top_books,
         books_by_category=books_by_category,
     )
+
+
+# ================= ADMIN: ADD BOOK =================
+@admin_bp.get("/books/new")
+@admin_required
+def new_book_form():
+    # -------- Provide cover choices from static assets --------
+    covers_dir = Path(__file__).resolve().parent / "static" / "img" / "covers"
+    cover_files: list[str] = []
+    if covers_dir.exists():
+        for p in sorted(covers_dir.iterdir()):
+            if p.is_file() and p.suffix.lower() in {".png", ".jpg", ".jpeg", ".webp", ".svg"}:
+                cover_files.append(p.name)
+
+    # -------- Suggest existing categories (still allow free text) --------
+    existing_categories = [
+        row[0]
+        for row in db.session.query(Book.category)
+        .distinct()
+        .order_by(Book.category.asc())
+        .all()
+        if row[0]
+    ]
+
+    return render_template(
+        "admin_add_book.html",
+        cover_files=cover_files,
+        existing_categories=existing_categories,
+    )
+
