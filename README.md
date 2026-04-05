@@ -568,3 +568,12 @@ CREATE USER bookly_user WITH PASSWORD 'change_me';
 CREATE DATABASE bookly_db OWNER bookly_user;
 ```
 
+### Initialise the database (PostgreSQL)
+
+```bash
+source .venv/bin/activate
+python -m flask --app app.py init-db
+```
+
+This creates tables from `models.py` and seeds books if the catalog is empty.
+
