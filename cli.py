@@ -434,6 +434,14 @@ def register_cli(app: Flask) -> None:
             existing = Book.query.filter_by(title=seeded.title).first()
             if existing is None:
                 db.session.add(seeded)
+                continue
+
+            # Only back-fill or upgrade cover_url; do not overwrite existing catalog text.
+            # If we add real cover images later, this will replace older SVG placeholders.
+            if (not existing.cover_url) or (
+                existing.cover_url.endswith(".svg") and existing.cover_url != seeded.cover_url
+            ):
+                existing.cover_url = seeded.cover_url
 
         db.session.commit()
 
