@@ -536,3 +536,35 @@ These choices are implemented as CSS variables at the top of `static/css/styles.
 
 ---
 
+## Development
+
+### Prerequisites
+
+- **Python 3.11+** (Heroku pin in `runtime.txt`).
+- **PostgreSQL** installed and running locally (e.g. Homebrew Postgres on macOS).
+
+### Environment setup
+```bash
+cd /path/to/bookly-final
+python3 -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env
+```
+
+In `.env` I set:
+
+- **`SECRET_KEY`** — a long random string for sessions.
+- **`DATABASE_URL`** — SQLAlchemy URL for Postgres, for example:
+
+```text
+postgresql+psycopg2://bookly_user:change_me@localhost:5432/bookly_db
+```
+
+Example SQL to create a matching role and database (names line up with the example URL above):
+
+```sql
+CREATE USER bookly_user WITH PASSWORD 'change_me';
+CREATE DATABASE bookly_db OWNER bookly_user;
+```
+
