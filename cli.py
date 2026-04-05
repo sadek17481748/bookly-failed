@@ -437,3 +437,14 @@ def register_cli(app: Flask) -> None:
 
         db.session.commit()
 
+    @app.cli.command("init-db")
+    def init_db() -> None:
+        # ================= init-db =================
+        # Creates tables from models.py, then seeds if the books table is empty.
+
+        db.create_all()
+
+        _seed_books()
+
+        print("Database initialized.")
+
