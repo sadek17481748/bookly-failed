@@ -24,5 +24,11 @@ def create_app() -> Flask:
 
     app = Flask(__name__)
     app.config.from_object(Config)
+
+    if not app.config.get("SQLALCHEMY_DATABASE_URI"):
+        raise RuntimeError(
+            "DATABASE_URL is missing. Create a .env file (see .env.example)."
+        )
+
     # ================= DATABASE (SQLALCHEMY) =================
     db.init_app(app)
