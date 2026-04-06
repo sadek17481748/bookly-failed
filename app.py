@@ -32,3 +32,9 @@ def create_app() -> Flask:
 
     # ================= DATABASE (SQLALCHEMY) =================
     db.init_app(app)
+
+    # ================= AUTH SESSION (FLASK-LOGIN) =================
+    login_manager = LoginManager()
+    login_manager.login_view = "auth.login_form"  # where @login_required sends guests
+    login_manager.init_app(app)
+
