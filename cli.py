@@ -456,3 +456,13 @@ def register_cli(app: Flask) -> None:
 
         print("Database initialized.")
 
+    @app.cli.command("reset-db")
+    def reset_db() -> None:
+        # ================= reset-db =================
+        # Wipes all data — used after a model/schema change during development.
+
+        db.drop_all()
+        db.create_all()
+        _seed_books()
+        print("Database reset and seeded.")
+
