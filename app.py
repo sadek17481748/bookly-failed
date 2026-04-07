@@ -83,3 +83,16 @@ def create_app() -> Flask:
     # init-db, reset-db, make-admin
     register_cli(app)
     return app
+
+
+# ============================================================
+# APP INSTANCE
+# - Used by `flask --app app` and by gunicorn (`app:app`)
+# ============================================================
+app = create_app()
+
+
+if __name__ == "__main__":
+    # ================= LOCAL DEVELOPMENT RUNNER =================
+    port = int(os.environ.get("PORT", "5000"))  # Heroku sets PORT
+    app.run(host="0.0.0.0", port=port, debug=True)
