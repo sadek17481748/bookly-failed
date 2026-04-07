@@ -38,3 +38,12 @@ def create_app() -> Flask:
     login_manager.login_view = "auth.login_form"  # where @login_required sends guests
     login_manager.init_app(app)
 
+    @login_manager.user_loader
+    def load_user(user_id: str):
+        # Flask-Login calls this with the user id stored in the session cookie.
+        try:
+            uid = int(user_id)
+        except ValueError:
+            return None
+        return User.query.get(uid)
+
