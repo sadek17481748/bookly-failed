@@ -47,3 +47,16 @@ def create_app() -> Flask:
             return None
         return User.query.get(uid)
 
+    # ================= BLUEPRINTS (FEATURE ROUTES) =================
+    # Routes live in auth.py, books.py, cart.py, orders.py, admin.py.
+    from auth import auth_bp
+    from admin import admin_bp
+    from books import books_bp
+    from cart import cart_bp
+    from orders import orders_bp
+
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(admin_bp)
+    app.register_blueprint(books_bp)
+    app.register_blueprint(cart_bp)
+    app.register_blueprint(orders_bp)
