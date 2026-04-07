@@ -60,3 +60,13 @@ def create_app() -> Flask:
     app.register_blueprint(books_bp)
     app.register_blueprint(cart_bp)
     app.register_blueprint(orders_bp)
+
+    # ================= SIMPLE PAGES (NON-BLUEPRINT) =================
+    @app.get("/")
+    def home():
+        return render_template("home.html")
+
+    @app.get("/contact")
+    def contact():
+        return render_template("contact.html")
+
