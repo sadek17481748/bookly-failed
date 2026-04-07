@@ -577,3 +577,12 @@ python -m flask --app app.py init-db
 
 This creates tables from `models.py` and seeds books if the catalog is empty.
 
+### Run the app locally
+
+```bash
+source .venv/bin/activate
+python -m flask --app app.py run --debug
+```
+
+The app served at `http://127.0.0.1:5000` during local runs.
+
