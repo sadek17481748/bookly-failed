@@ -586,3 +586,19 @@ python -m flask --app app.py run --debug
 
 The app served at `http://127.0.0.1:5000` during local runs.
 
+### Troubleshooting (local Postgres setup)
+
+- **`password authentication failed for user ...`**
+  - This usually means `DATABASE_URL` in `.env` still has placeholder values or the Postgres user password does not match.
+  - Fix by updating `.env` to a real connection string and (re)setting the user password in Postgres, for example:
+
+```sql
+ALTER USER bookly_user WITH PASSWORD 'bookly_pass';
+```
+
+- **Commands typed inside `psql` by mistake**
+  - If the prompt looks like `postgres=#` or `postgres-#`, you are inside Postgres interactive mode.
+  - Exit with `\q` to return to the normal terminal prompt before running:
+    - `python -m flask --app app.py init-db`
+    - `python -m flask --app app.py run --debug`
+
