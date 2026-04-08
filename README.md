@@ -602,3 +602,24 @@ ALTER USER bookly_user WITH PASSWORD 'bookly_pass';
     - `python -m flask --app app.py init-db`
     - `python -m flask --app app.py run --debug`
 
+### Promote an admin user
+
+After I registered a user in the browser:
+
+```bash
+python -m flask --app app.py make-admin
+```
+
+The command prompts for an email; I used the account I wanted to promote so `is_admin` is set and `/admin/analytics` unlocks.
+
+### Assessor / invigilator login (analytics access)
+
+To make marking simpler, I created a dedicated admin account for the analytics dashboard:
+
+- **Email:** `analytics@testemail.com`
+- **Password:** `test123`
+
+After logging in, the admin analytics dashboard is available at **`/admin/analytics`**.
+
+**Note (live Heroku app):** The Heroku deployment uses its own Postgres database, so the account must be **registered on the live site** and then promoted to admin (set `users.is_admin = true`). This can be done using `heroku pg:psql` or by running the existing CLI command (`make-admin`) against the Heroku app.
+
