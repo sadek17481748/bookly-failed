@@ -635,3 +635,33 @@ After logging in, the admin analytics dashboard is available at **`/admin/analyt
 - **GitHub Pages (documentation site)**: [`sadek17481748.github.io/bookly`](https://sadek17481748.github.io/bookly/)
 - **Closed issues (progress log)**: [GitHub Issues (closed)](https://github.com/sadek17481748/bookly-failed/issues?q=is%3Aissue%20state%3Aclosed)
 
+## Key UI screenshots (assessor)
+
+Screenshots are shown below so key screens are visible directly in this README.
+
+### Home
+
+![Home page](docs/images/manual-testing/01-home.png)
+
+### Books
+
+![Books list page](docs/images/manual-testing/03-books-list.png)
+
+### Contact
+
+![Contact page](docs/images/manual-testing/02-contact.png)
+
+### Login
+
+![Login page](docs/images/manual-testing/08-login-success.png)
+
+### Register
+
+![Register page](docs/images/manual-testing/06a-register-form.png)
+
+### Analytics (admin)
+
+![Analytics dashboard](docs/images/manual-testing/21-analytics-admin.png)
+
+---
+
