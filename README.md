@@ -623,3 +623,15 @@ After logging in, the admin analytics dashboard is available at **`/admin/analyt
 
 **Note (live Heroku app):** The Heroku deployment uses its own Postgres database, so the account must be **registered on the live site** and then promoted to admin (set `users.is_admin = true`). This can be done using `heroku pg:psql` or by running the existing CLI command (`make-admin`) against the Heroku app.
 
+## Quick links (assessor)
+
+- **Repository (README / code)**: [`sadek17481748/bookly`](https://github.com/sadek17481748/bookly-failed)
+- **Wireframes section (README anchor)**: [Wireframes](https://github.com/sadek17481748/bookly-failed#wireframes)
+- **Live app (Heroku)**: [`bookly-final-98e88d5d388e.herokuapp.com`](https://bookly-final-98e88d5d388e.herokuapp.com/)
+- **Live app login page**: [Login](https://bookly-final-98e88d5d388e.herokuapp.com/login)
+- **Analytics dashboard (admin-only)**: [`/admin/analytics`](https://bookly-final-98e88d5d388e.herokuapp.com/admin/analytics) — shows revenue, orders, top sellers, and catalogue breakdown (requires the assessor admin login).
+- **Assessor analytics login**: `analytics@testemail.com` / `test123` — admin account for accessing the analytics dashboard on the live site.
+- **Bug tracker (GitHub Project board)**: [`github.com/users/sadek17481748/projects/6`](https://github.com/users/sadek17481748/projects/6)
+- **GitHub Pages (documentation site)**: [`sadek17481748.github.io/bookly`](https://sadek17481748.github.io/bookly/)
+- **Closed issues (progress log)**: [GitHub Issues (closed)](https://github.com/sadek17481748/bookly-failed/issues?q=is%3Aissue%20state%3Aclosed)
+
