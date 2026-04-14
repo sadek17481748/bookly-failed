@@ -30,3 +30,20 @@ def app():
 def client(app):
     return app.test_client()
 
+
+@pytest.fixture
+def sample_book(app):
+    """One catalog row for detail / cart tests."""
+    with app.app_context():
+        b = Book(
+            title="Test Book Alpha",
+            author="Test Author",
+            category="Testing",
+            price_cents=999,
+            description="Synthetic row for automated tests.",
+            cover_url=None,
+        )
+        db.session.add(b)
+        db.session.commit()
+        bid = b.id
+    return bid
