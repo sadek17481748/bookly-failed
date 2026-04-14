@@ -18,3 +18,8 @@ def test_books_list_empty_ok(client):
     assert r.status_code == 200
     assert b"Books" in r.data
 
+
+def test_book_detail_404(client):
+    r = client.get("/books/99999")
+    assert r.status_code == 404
+
