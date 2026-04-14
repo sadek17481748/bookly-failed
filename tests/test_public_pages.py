@@ -12,3 +12,9 @@ def test_contact_ok(client):
     assert r.status_code == 200
     assert b"Contact" in r.data
 
+
+def test_books_list_empty_ok(client):
+    r = client.get("/books")
+    assert r.status_code == 200
+    assert b"Books" in r.data
+
