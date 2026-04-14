@@ -7,3 +7,8 @@ def test_home_ok(client):
     assert b"bookly" in r.data.lower() or b"Find your next" in r.data
 
 
+def test_contact_ok(client):
+    r = client.get("/contact")
+    assert r.status_code == 200
+    assert b"Contact" in r.data
+
