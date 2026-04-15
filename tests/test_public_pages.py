@@ -30,3 +30,7 @@ def test_book_detail_ok(client, sample_book):
     assert b"Test Book Alpha" in r.data
     assert b"Test Author" in r.data
 
+
+def test_static_css_served(client):
+    r = client.get("/static/css/styles.css")
+    assert r.status_code == 200
