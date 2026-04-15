@@ -11,3 +11,30 @@ def test_login_get_ok(client):
     r = client.get("/login")
     assert r.status_code == 200
 
+
+def test_register_login_flow(client, app):
+    with app.app_context():
+        from models import User
+
+        assert User.query.filter_by(email="flow@example.com").first() is None
+
+    r = client.post(
+        "/register",
+        data={
+            "email": "flow@example.com",
+            "password": "hunter22pass",
+            "password2": "hunter22pass",
+        },
+        follow_redirects=True,
+    )
+    assert r.status_code == 200
+
+    client.post("/logout", follow_redirects=True)
+
+    r2 = client.post(
+        "/login",
+        data={"email": "flow@example.com", "password": "hunter22pass"},
+        follow_redirects=True,
+    )
+    assert r2.status_code == 200
+
