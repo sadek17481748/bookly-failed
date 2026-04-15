@@ -38,3 +38,16 @@ def test_register_login_flow(client, app):
     )
     assert r2.status_code == 200
 
+
+def test_register_password_mismatch(client):
+    r = client.post(
+        "/register",
+        data={
+            "email": "bad@example.com",
+            "password": "aaa",
+            "password2": "bbb",
+        },
+        follow_redirects=False,
+    )
+    assert r.status_code == 302
+
