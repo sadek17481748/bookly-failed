@@ -51,3 +51,20 @@ def test_register_password_mismatch(client):
     )
     assert r.status_code == 302
 
+
+def test_login_bad_password(client, app):
+    with app.app_context():
+        from db import db
+        from models import User
+
+        u = User(email="solo@example.com")
+        u.set_password("correcthorse")
+        db.session.add(u)
+        db.session.commit()
+
+    r = client.post(
+        "/login",
+        data={"email": "solo@example.com", "password": "wrong"},
+        follow_redirects=False,
+    )
+    assert r.status_code == 302
