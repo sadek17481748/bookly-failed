@@ -51,3 +51,8 @@ def test_checkout_empty_cart_redirects(client, app):
     assert r.status_code == 200
     assert b"cart" in r.data.lower()
 
+
+def test_admin_analytics_requires_login(client):
+    r = client.get("/admin/analytics", follow_redirects=False)
+    assert r.status_code == 302
+
