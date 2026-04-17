@@ -76,3 +76,24 @@ def test_admin_analytics_forbidden_for_normal_user(client, app):
     r = client.get("/admin/analytics")
     assert r.status_code == 403
 
+
+def test_admin_analytics_ok_for_admin(client, app):
+    with app.app_context():
+        from db import db
+        from models import User
+
+        u = User(email="boss@example.com", is_admin=True)
+        u.set_password("pw123456")
+        db.session.add(u)
+        db.session.commit()
+
+    client.post(
+        "/login",
+        data={"email": "boss@example.com", "password": "pw123456"},
+        follow_redirects=True,
+    )
+
+    r = client.get("/admin/analytics")
+    assert r.status_code == 200
+    assert b"Analytics" in r.data or b"revenue" in r.data.lower()
+
