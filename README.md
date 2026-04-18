@@ -665,3 +665,12 @@ Screenshots are shown below so key screens are visible directly in this README.
 
 ---
 
+### Automated tests (no Postgres required for pytest)
+
+```bash
+source .venv/bin/activate
+pytest -v
+```
+
+Tests use **SQLite in-memory** via `tests/conftest.py` so they run quickly; I still demonstrated PostgreSQL using the steps above. A feature → test mapping is included in the Automated testing section below.
+
