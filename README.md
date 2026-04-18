@@ -676,3 +676,83 @@ Tests use **SQLite in-memory** via `tests/conftest.py` so they run quickly; I st
 
 ---
 
+## Deployment
+
+I deployed bookly to Heroku and used Heroku Postgres for the production database.
+
+### Heroku deployment (step-by-step)
+
+**Install and login (local machine):**
+
+```bash
+brew tap heroku/brew && brew install heroku
+heroku login
+```
+
+**Create/link the Heroku app:**
+
+```bash
+cd /path/to/bookly-final
+heroku create bookly-final
+heroku git:remote -a bookly-final
+```
+
+**Add a managed Postgres database (sets `DATABASE_URL`):**
+
+```bash
+heroku addons:create heroku-postgresql:essential-0 -a bookly-final
+```
+
+**Set required config vars:**
+
+```bash
+heroku config:set SECRET_KEY="a-long-random-string" -a bookly-final
+```
+
+**Deploy code and initialise the database (create tables + seed):**
+
+```bash
+git push heroku main
+heroku run -a bookly-final -- python3 -m flask --app app.py init-db
+heroku open -a bookly-final
+```
+
+**Production notes:**
+
+- `Procfile` runs the app with **Gunicorn** (`gunicorn app:app`).
+- Heroku provides `DATABASE_URL` in the `postgres://...` form; the app normalises this to `postgresql://...` for SQLAlchemy compatibility in `config.py`.
+- During deployment I used `heroku logs --tail -a bookly-final` to diagnose startup issues.
+
+**Live site URL (Heroku):**
+
+- `https://bookly-final-98e88d5d388e.herokuapp.com/`
+
+### GitHub repository + Pages
+
+- I created the GitHub repository and added the project documentation (`README.md`).
+- To publish the documentation on GitHub Pages, I opened **Settings → Pages**, selected **Deploy from a branch**, chose **`main`** as the source, and saved to generate the Pages site.
+- I also used GitHub **Issues** to log issues and user stories, and to track progress throughout development.
+
+### How I committed changes to GitHub (workflow used)
+
+During development I used a simple Git workflow so changes were traceable and easy to review:
+
+- I checked what changed with `git status` and `git diff`.
+- I staged the files I wanted in the commit with `git add ...`.
+- I created a commit with a short message describing what changed and why.
+- I pushed commits to GitHub so the repository stayed up to date.
+
+Typical commands I used:
+
+```bash
+git status
+git diff
+git add README.md
+git commit -m "docs(readme): update testing evidence"
+git push origin main
+```
+
+Where changes affected both documentation and the app itself, I kept commits separate so it was obvious what was “README/docs” and what was “code changes”.
+
+---
+
