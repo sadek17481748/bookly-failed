@@ -97,3 +97,8 @@ def test_admin_analytics_ok_for_admin(client, app):
     assert r.status_code == 200
     assert b"Analytics" in r.data or b"revenue" in r.data.lower()
 
+
+def test_admin_add_book_requires_login(client):
+    r = client.get("/admin/books/new", follow_redirects=False)
+    assert r.status_code == 302
+
