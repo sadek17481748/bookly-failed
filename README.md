@@ -919,3 +919,122 @@ These checks focus on places where user input can be correct/incorrect and where
     - optional cover filename must exist under `static/img/covers/`.
     - duplicate (title + author) is blocked.
 
+### Automated testing
+
+For this project, I used **pytest** to write automated tests. The tests are located in the `tests/` directory and include:
+
+- **`conftest.py`** — Sets `DATABASE_URL=sqlite:///:memory:` **before** the application module loads (so `create_app()` does not require PostgreSQL during `pytest`), resets the schema for each test, and provides shared fixtures (including a **`sample_book`** row inserted for detail/cart tests).
+- **`test_public_pages.py`** — Checks the home page, contact page, books list, book detail, **404** for an unknown id, and that **static CSS** is served.
+- **`test_auth.py`** — Exercises registration and login **GET** pages, the full **register → logout → login** flow, **password mismatch** on register, and **wrong password** on login.
+- **`test_books_reviews.py`** — Verifies **search** (`?q=`), that **creating a review requires login**, and that a logged-in user can **post** a review. **Edit** and **delete** for reviews are covered in **manual** testing above only (not automated in the current suite).
+- **`test_cart_orders_admin.py`** — Ensures the **cart** requires authentication, that items can be **added** to the cart, that **checkout with an empty cart** is handled, and that **admin analytics** requires login, returns **403** for a normal user, and **200** for an admin.
+
+I was able to create these tests by following online tutorials and resources about testing Flask applications with pytest. Some helpful sources I used include:
+
+- [Test a Flask App with pytest – Real Python](https://realpython.com/test-flask-apps/)
+- [pytest documentation](https://docs.pytest.org/)
+- [Testing Flask Applications – Flask documentation](https://flask.palletsprojects.com/en/stable/testing/)
+- [pytest-flask documentation](https://pytest-flask.readthedocs.io/) — I did not use this plugin; the suite uses the stock Flask test client from `pytest` fixtures.
+
+These resources helped me understand how to set up test environments, use an **in-memory database** for fast automated runs, and write **assertions** on HTTP status codes and HTML responses for different parts of the Flask app.
+
+Below is a compact **feature → test** map showing what each automated test covers.
+
+#### Feature → test mapping (simple)
+
+| Feature | Test file | Test name | What it checks |
+|--------|-----------|-----------|----------------|
+| Home page loads | `test_public_pages.py` | `test_home_ok` | `GET /` returns 200 and expected text |
+| Contact page loads | `test_public_pages.py` | `test_contact_ok` | `GET /contact` returns 200 |
+| Books list loads | `test_public_pages.py` | `test_books_list_empty_ok` | `GET /books` returns 200 |
+| Search works | `test_books_reviews.py` | `test_books_search_param_ok` | `?q=` returns matching book |
+| Book detail loads | `test_public_pages.py` | `test_book_detail_ok` | `GET /books/<id>` shows title/author |
+| Missing book returns 404 | `test_public_pages.py` | `test_book_detail_404` | Unknown id returns 404 |
+| CSS is served | `test_public_pages.py` | `test_static_css_served` | `GET /static/css/styles.css` returns 200 |
+| Register page loads | `test_auth.py` | `test_register_get_ok` | `GET /register` returns 200 |
+| Login page loads | `test_auth.py` | `test_login_get_ok` | `GET /login` returns 200 |
+| Register → logout → login | `test_auth.py` | `test_register_login_flow` | Full auth flow works |
+| Register mismatch blocked | `test_auth.py` | `test_register_password_mismatch` | Mismatch redirects (validation path) |
+| Wrong password blocked | `test_auth.py` | `test_login_bad_password` | Wrong password redirects to login |
+| Review requires login | `test_books_reviews.py` | `test_create_review_requires_login` | Guest POST review redirects to login |
+| Review can be created | `test_books_reviews.py` | `test_create_review_ok` | Logged-in user can post a review |
+| Cart requires login | `test_cart_orders_admin.py` | `test_cart_requires_login` | Guest `GET /cart` redirects |
+| Add to cart works | `test_cart_orders_admin.py` | `test_add_to_cart_ok` | Logged-in user can add a book |
+| Empty cart checkout blocked | `test_cart_orders_admin.py` | `test_checkout_empty_cart_redirects` | Empty checkout handled safely |
+| Admin analytics requires login | `test_cart_orders_admin.py` | `test_admin_analytics_requires_login` | Guest redirects to login |
+| Admin analytics forbidden | `test_cart_orders_admin.py` | `test_admin_analytics_forbidden_for_normal_user` | Non-admin gets 403 |
+| Admin analytics works | `test_cart_orders_admin.py` | `test_admin_analytics_ok_for_admin` | Admin gets 200 |
+
+#### Limits (what automated tests do not cover)
+
+- Payments are not integrated (checkout is “store the order”, not card processing).
+- There is no email sending to test.
+- UI layout changes are only checked where tests assert on key HTML text.
+
+#### Running pytest locally (terminal evidence)
+
+Because `pytest` is installed inside the project’s virtual environment, I activated the venv first and then ran the suite in verbose mode:
+
+```bash
+source .venv/bin/activate
+pytest -v
+```
+
+Output from my local run:
+
+```text
+mohammedhussain@Mohammeds-MacBook-Air bookly-final % source .venv/bin/activate
+pytest -v
+===================== test session starts =====================
+platform darwin -- Python 3.13.3, pytest-9.0.3, pluggy-1.6.0 -- /Users/mohammedhussain/Desktop/bookly-final/.venv/bin/python3.13
+cachedir: .pytest_cache
+rootdir: /Users/mohammedhussain/Desktop/bookly-final
+configfile: pytest.ini
+testpaths: tests
+collected 23 items                                            
+
+tests/test_auth.py::test_register_get_ok PASSED         [  4%]
+tests/test_auth.py::test_login_get_ok PASSED            [  8%]
+tests/test_auth.py::test_register_login_flow PASSED     [ 13%]
+tests/test_auth.py::test_register_password_mismatch PASSED [ 17%]
+tests/test_auth.py::test_login_bad_password PASSED      [ 21%]
+tests/test_books_reviews.py::test_books_search_param_ok PASSED [ 26%]
+tests/test_books_reviews.py::test_create_review_requires_login PASSED [ 30%]
+tests/test_books_reviews.py::test_create_review_ok PASSED [ 34%]
+tests/test_cart_orders_admin.py::test_cart_requires_login PASSED [ 39%]
+tests/test_cart_orders_admin.py::test_add_to_cart_ok PASSED [ 43%]
+tests/test_cart_orders_admin.py::test_checkout_empty_cart_redirects PASSED [ 47%]
+tests/test_cart_orders_admin.py::test_admin_analytics_requires_login PASSED [ 52%]
+tests/test_cart_orders_admin.py::test_admin_analytics_forbidden_for_normal_user PASSED [ 56%]
+tests/test_cart_orders_admin.py::test_admin_analytics_ok_for_admin PASSED [ 60%]
+tests/test_cart_orders_admin.py::test_admin_add_book_requires_login PASSED [ 65%]
+tests/test_cart_orders_admin.py::test_admin_add_book_forbidden_for_normal_user PASSED [ 69%]
+tests/test_cart_orders_admin.py::test_admin_add_book_ok_for_admin PASSED [ 73%]
+tests/test_public_pages.py::test_home_ok PASSED         [ 78%]
+tests/test_public_pages.py::test_contact_ok PASSED      [ 82%]
+tests/test_public_pages.py::test_books_list_empty_ok PASSED [ 86%]
+tests/test_public_pages.py::test_book_detail_404 PASSED [ 91%]
+tests/test_public_pages.py::test_book_detail_ok PASSED  [ 95%]
+tests/test_public_pages.py::test_static_css_served PASSED [100%]
+
+====================== warnings summary =======================
+tests/test_auth.py: 3 warnings
+tests/test_books_reviews.py: 3 warnings
+tests/test_cart_orders_admin.py: 16 warnings
+  /Users/mohammedhussain/Desktop/bookly-final/app.py:48: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    return User.query.get(uid)
+
+tests/test_books_reviews.py::test_create_review_ok
+tests/test_books_reviews.py::test_create_review_ok
+tests/test_cart_orders_admin.py::test_add_to_cart_ok
+tests/test_cart_orders_admin.py::test_admin_add_book_ok_for_admin
+tests/test_public_pages.py::test_book_detail_404
+tests/test_public_pages.py::test_book_detail_ok
+  /Users/mohammedhussain/Desktop/bookly-final/.venv/lib/python3.13/site-packages/flask_sqlalchemy/query.py:30: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    rv = self.get(ident)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============== 23 passed, 28 warnings in 2.12s ===============
+(.venv) mohammedhussain@Mohammeds-MacBook-Air bookly-final %
+```
+
