@@ -1064,3 +1064,48 @@ The rows below match the automated tests in `tests/` (reproducible with `pytest 
 | 18 | Public pages | Unknown book id returns **404** | Pass | `test_book_detail_404` |
 | 19 | Public pages | Book detail shows seeded sample book | Pass | `test_book_detail_ok` |
 
+### Bugs encountered during development
+
+The table below is a **bug / issue log** in the style used for coursework: it records problems **encountered while building bookly**, how serious they were, and that they were **resolved**. It is **not** a list of current security defects—the shipped app uses **Werkzeug password hashing** and server-side checks as implemented in `models.py` and the blueprints.
+
+To track issues during development, I also used a GitHub **Project board** as a simple bug tracker ([`projects/6`](https://github.com/users/sadek17481748/projects/6)). I used **Low / Medium / High** priority labels to decide what to fix first (for example, authentication, ownership checks, and checkout logic were treated as higher priority than UI tweaks), and the board helped me keep a clear record of what was open, what was in progress, and what was resolved.
+
+### Use of AI (assistance log)
+
+This table lists where AI-assisted help was used during development and documentation. In places, I also marked content with **“(AI)”** to make it clear where AI assistance was involved.
+
+My process was:
+
+- I used credited examples/tutorials as a starting point for patterns (routing, forms, validation, and testing structure).
+- When an implementation did not work or needed changing to match bookly, I tried to adjust the code myself first (aligning routes, templates, and database models to this project).
+- When I got stuck, AI helped by suggesting likely causes, pointing me to relevant documentation, and recommending specific videos/tutorial topics that matched the problem. I then applied the fix manually and verified it worked in my project.
+
+The final code and write-up were still checked, edited, and tested manually to match how the project actually works.
+
+| Area / section | What AI assistance was used for | Notes / checks I still did |
+|---|---|---|
+| **README + docs** (`README.md`, `docs/*.md`) | Spell-checking, rephrasing for clarity, tightening wording, and structuring sections (TOC, headings). | I verified all steps and claims against the actual repository contents and deployment flow. |
+| **Pytest suite** (`tests/`) | Drafting test structure and suggesting assertions/fixtures for Flask routes. | I ran the tests, fixed failures, and aligned each test to real routes and behaviours. |
+| **Python (Flask / SQLAlchemy)** (`app.py`, blueprints, `cli.py`) | Spot-checking patterns (blueprints, decorators, error handlers) and suggesting safer validation/guard logic. | I implemented the logic, tested flows in-browser, and confirmed DB writes/reads in Postgres. |
+| **HTML/Jinja templates** (`templates/`) | Suggesting layout tweaks and accessibility improvements (labels, alt text, ARIA). | I checked pages visually, verified navigation flows, and ensured server-side checks remained in Python. |
+| **CSS/JS** (`static/css/styles.css`, `static/js/main.js`) | Minor suggestions for responsiveness and small JS helpers (nav toggle, confirm). | I validated behaviour on multiple screen sizes and confirmed no critical console errors. |
+
+| Bug number | Area | Description | Severity | Priority | Solutions | Status |
+|------------|------|-------------|----------|----------|-----------|--------|
+| 1 | Environment | (AI assisted) App crashed on startup when `DATABASE_URL` was missing from `.env` | High | High | Add `.env` using `.env.example`, set `DATABASE_URL` and `SECRET_KEY`, then restart the server. | Resolved |
+| 2 | Database | (AI assisted) First run: empty tables until `flask init-db` was documented and run | Medium | High | Run `python -m flask --app app.py init-db` to create tables and seed the catalogue. | Resolved |
+| 3 | Database | (AI assisted) Iterating on SQLAlchemy models required `flask reset-db` to rebuild schema during dev | Medium | Medium | Run `python -m flask --app app.py reset-db` after model/schema changes to drop/recreate tables and reseed. | Resolved |
+| 4 | Auth | (AI assisted) Login redirect / `next` URL behaviour needed checking after form changes | Medium | Medium | Preserve `next` in the login form/action and redirect to `next` after successful login; verify with manual tests. | Resolved |
+| 5 | Reviews | (AI assisted) Ensuring only the **owner** can delete or edit a review (server-side guard) | High | High | Add server-side ownership checks (`review.user_id == current_user.id`) in edit/delete routes; hide buttons in templates as a secondary UX measure. | Resolved |
+| 6 | Search | (AI assisted) Verifying search matched **title and author** case-insensitively (`ILIKE`) | Medium | Medium | Use SQLAlchemy `ilike` filters on `Book.title` and `Book.author` and test with mixed-case queries. | Resolved |
+| 7 | Cart | (AI assisted) Cart line **merge** behaviour when adding the same book twice (unique constraint) | Medium | Medium | Enforce one row per `(user_id, book_id)` and merge quantities in `add_to_cart`; verify with repeated adds. | Resolved |
+| 8 | Cart | (AI assisted) Quantity **0** or remove: line removed and totals consistent | Medium | Medium | Treat quantity < 1 as delete; recalculate subtotal from remaining lines and confirm via manual tests. | Resolved |
+| 9 | Checkout | (AI assisted) Empty-cart checkout must not create an order; flash + redirect | High | High | Block checkout when cart is empty; flash an error and redirect back to the cart page. | Resolved |
+| 10 | Admin | (AI assisted) Non-admin access to `/admin/analytics` must return **403**, not expose data | High | Critical | Add an admin-only decorator that checks `current_user.is_admin`; abort with 403 for non-admins. | Resolved |
+| 11 | Testing | (AI assisted) Pytest uses **SQLite in-memory**; behaviour must still be validated on **Postgres** manually | Low | Medium | Run pytest on SQLite for speed, and separately verify key flows manually against Postgres (checkout, admin, ownership checks). | Resolved |
+| 12 | Static | (AI assisted) Cover URLs and `/static/img/covers/` paths had to stay consistent with `book_covers.py` | Low | Low | Standardise `cover_url` values to `/static/img/covers/<slug>.svg` and keep slugs generated by `book_covers.py`. | Resolved |
+| 13 | Database / Setup | (AI assisted) Local run failed with `password authentication failed` because `.env` still contained placeholder `DATABASE_URL` values (`USER:PASSWORD@.../DBNAME`). Resolved by creating/updating the Postgres role/database and ensuring commands like `python -m flask ...` were run in the terminal (not inside `psql`). | Medium | High | Update `.env` with a real `DATABASE_URL`; set/reset the Postgres password with `ALTER USER ... WITH PASSWORD ...`; exit `psql` with `\\q` before running Flask commands. | Resolved |
+| 14 | Static / Seed data | (AI assisted) Book cover images did not appear on cards because the `books` table already contained older seeded rows with empty `cover_url` values, and `flask init-db` only seeds when the catalogue is empty. Resolved by resetting and re-seeding (`flask reset-db`) so seeded books include correct `/static/img/covers/*.svg` paths. | Low | Medium | Run `python -m flask --app app.py reset-db` to reseed with covers (or update existing `books.cover_url` values if data must be kept). | Resolved |
+
+
+
