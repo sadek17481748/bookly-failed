@@ -1038,3 +1038,29 @@ tests/test_public_pages.py::test_book_detail_ok
 (.venv) mohammedhussain@Mohammeds-MacBook-Air bookly-final %
 ```
 
+### Testing summary table
+
+The rows below match the automated tests in `tests/` (reproducible with `pytest -v`). **Pass/Fail** and **Notes** reflect my last full run before submission.
+
+| Test number | Area | What it verifies | Pass/Fail | Notes |
+|---------------|------|------------------|-----------|-------|
+| 1 | Authentication | `GET /register` loads | Pass | `test_register_get_ok` |
+| 2 | Authentication | `GET /login` loads | Pass | `test_login_get_ok` |
+| 3 | Authentication | Register → logout → login works end-to-end | Pass | `test_register_login_flow` |
+| 4 | Authentication | Register rejected when passwords do not match | Pass | `test_register_password_mismatch` |
+| 5 | Authentication | Login rejected when password is wrong | Pass | `test_login_bad_password` |
+| 6 | Books & reviews | Search returns matching book | Pass | `test_books_search_param_ok` |
+| 7 | Books & reviews | Guest cannot POST a review (redirect to login) | Pass | `test_create_review_requires_login` |
+| 8 | Books & reviews | Logged-in user can create a review | Pass | `test_create_review_ok` |
+| 9 | Cart & orders | Guest cannot open cart (redirect) | Pass | `test_cart_requires_login` |
+| 10 | Cart & orders | Logged-in user can add a book to cart | Pass | `test_add_to_cart_ok` |
+| 11 | Cart & orders | Checkout with empty cart is handled safely | Pass | `test_checkout_empty_cart_redirects` |
+| 12 | Admin | Guest cannot open analytics (redirect) | Pass | `test_admin_analytics_requires_login` |
+| 13 | Admin | Non-admin receives **403** on analytics | Pass | `test_admin_analytics_forbidden_for_normal_user` |
+| 14 | Admin | Admin user receives **200** and dashboard content | Pass | `test_admin_analytics_ok_for_admin` |
+| 15 | Public pages | Home page loads with expected content | Pass | `test_home_ok` |
+| 16 | Public pages | Contact page loads | Pass | `test_contact_ok` |
+| 17 | Public pages | Books list page loads | Pass | `test_books_list_empty_ok` |
+| 18 | Public pages | Unknown book id returns **404** | Pass | `test_book_detail_404` |
+| 19 | Public pages | Book detail shows seeded sample book | Pass | `test_book_detail_ok` |
+
