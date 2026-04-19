@@ -756,3 +756,80 @@ Where changes affected both documentation and the app itself, I kept commits sep
 
 ---
 
+## Technical overview
+
+### Why PostgreSQL is the technical centre of this work
+
+PostgreSQL is a core part of the project:
+
+- **Connection:** the app reads `DATABASE_URL` from the environment (`config.py`, `.env.example`). In development this pointed at a **local Postgres** instance; on Heroku it used the **managed Postgres** add-on URL.
+- **Integrity:** foreign keys tie reviews to users and books, cart lines to users and books, order items to orders and books. `schema.sql` lists the same structure for reference and marking.
+- **Meaningful writes:** checkout creates an `orders` row and multiple `order_items` rows, then deletes `cart_items` for that user—i.e. a **multi-table write** I verified in `psql` and other SQL clients during development.
+- **Read patterns:** the admin dashboard uses **aggregations** (`COUNT`, `SUM`, `GROUP BY`, joins) executed against real tables—exactly the kind of SQL competence Project 3 is meant to evidence, surfaced through the UI.
+
+Automated tests in `tests/` use **SQLite in-memory** only so `pytest` runs quickly **without** Postgres on the machine running CI. For marking and demos I still ran the app against **PostgreSQL** as described in [Development](#development).
+
+### Request flow overview
+
+1. The browser requests a URL (e.g. `/books`).
+2. Flask maps the URL to a **view function** in a blueprint (`books.py`, `cart.py`, etc.).
+3. The view uses **SQLAlchemy** to query or change rows in **PostgreSQL** (via `DATABASE_URL`).
+4. Flask renders a **Jinja2** template and injects the results (e.g. `books`, `reviews`).
+5. The server returns **HTML**; the browser requests **static** assets (`styles.css`, `main.js`).
+6. Small behaviours (mobile nav toggle, `data-confirm` on delete) are handled in **JavaScript** without replacing server-side validation.
+
+This is **server-side rendering**, not a single-page React/Vue app: most HTML is produced on the server, which keeps the project understandable while still being “full stack” in the sense of **HTTP + app + database**.
+
+### Role of Flask
+
+Flask provides the **web layer** between the user and PostgreSQL:
+
+- **Routing:** maps paths like `/`, `/books`, `/cart`, `/orders/checkout` to Python functions.
+- **HTTP verbs:** distinguishes **GET** (show form or page) from **POST** (submit form, mutate data).
+- **Sessions / auth:** Flask-Login loads the current user from the session cookie and ties actions to `users.id` in Postgres.
+- **Templates:** connects each response to a file under `templates/`.
+- **Blueprints:** splits features into `auth.py`, `books.py`, `cart.py`, `orders.py`, `admin.py` so the codebase stays readable.
+
+### Database (PostgreSQL)
+
+PostgreSQL stores:
+
+- **Users** (email, password hash, admin flag, timestamps).
+- **Books** (title, author, category, price in cents, description, optional `cover_url`).
+- **Reviews** (rating, body, links to user and book).
+- **Cart items** (per user and book, quantity; unique constraint so one row merges quantities).
+- **Orders** and **order items** (order header + line items with **unit price snapshot** in cents).
+
+SQLAlchemy maps Python classes in `models.py` to these tables. **`flask init-db`** calls `db.create_all()` so the live schema matches the models (`cli.py`). **`schema.sql`** is a human-readable duplicate of the layout for documentation and external review.
+
+### Project 3 scope vs what this submission demonstrates
+
+For **Project 3**, the emphasis is on **PostgreSQL**—designing tables, relationships, and queries—and demonstrating that data in a working project.
+
+While building bookly, I watched a range of tutorials and walkthroughs (Flask + database projects). As a result, I included a few extra “real app” steps that were not strictly required by the brief, because they helped me complete the overall logic of the site and make the database work easier to demonstrate end-to-end.
+
+| Typical Project 3 focus | What bookly adds (and why) |
+|-------------------------|----------------------------|
+| SQL scripts, ER thinking, maybe a thin UI | **End-to-end paths**: browser → Flask routes → SQLAlchemy → **PostgreSQL** → HTML response. That makes the database work **visible and testable** as part of a real use case (browse → cart → checkout → orders). |
+| Less emphasis on auth, sessions, deployment | **Flask-Login** sessions, **environment-based configuration**, and a **Heroku-style** deployment story so Postgres is not “theory only” but runnable **locally and** on a hosted database. |
+
+**Why this still fits the marking criteria**
+
+1. **PostgreSQL remains the source of truth.** Users, books, reviews, cart rows, orders, and order items all live in Postgres. The ORM generates SQL; constraints (foreign keys, uniqueness on cart lines) match standard relational design taught on the course.
+2. **A thin static page** can show a `SELECT` result, but it does not demonstrate **transactions across steps** (cart updates, checkout clearing the cart while inserting orders) or **authorization** (only the review owner can delete). Those behaviours need **application logic** tied to the database.
+3. **Separation of concerns is still clear:** `schema.sql` documents the DDL; `models.py` mirrors it for SQLAlchemy; `books.py`, `cart.py`, `orders.py` show **which HTTP actions cause which writes** to Postgres.
+
+For assessment, **`schema.sql`** and the **`models.py` ↔ table mapping** document the relational design and local setup. The Flask routes and blueprints show **how** that PostgreSQL design is exercised in practice (browse, cart, checkout, admin reads).
+
+### HTML, CSS, JavaScript
+
+- **HTML / Jinja2** under `templates/` builds pages and loops (e.g. book grid, review list).
+- **CSS** in `static/css/styles.css` defines layout, dark theme, responsive grids, forms, and admin tables.
+- **JavaScript** in `static/js/main.js` adds progressive enhancements (nav toggle, confirm before destructive POSTs). **Security rules stay on the server** (e.g. “only delete your own review” is enforced in Python, not only in JS).
+
+### Why this approach?
+
+Server-rendered Flask keeps the database work clear: every important screen is backed by a query or a write to **PostgreSQL**. This matches Project 3 learning outcomes while still being a complete small app.
+
+---
+
