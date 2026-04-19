@@ -833,3 +833,89 @@ Server-rendered Flask keeps the database work clear: every important screen is b
 
 ---
 
+## Testing and Bugs
+
+### Manual testing
+
+I complemented automated tests with manual runs in the browser, recording **what I did**, **what I expected**, and **what happened**. The table below is the checklist I used; I filled **Pass/Fail**, **Notes**, and captured screenshots in `docs/images/manual-testing/`.
+
+| # | Area | Step | Expected | Pass/Fail | Notes | Screenshot evidence |
+|---|------|------|----------|-----------|-------|-------------------|
+| 1 | Public | Open `/` | Home loads; branding and hero visible | Pass |  | [01-home](docs/images/manual-testing/01-home.png) |
+| 2 | Public | Open `/contact` | Contact content loads | Pass |  | [02-contact](docs/images/manual-testing/02-contact.png) |
+| 3 | Public | Open `/books` | Catalog or empty state loads | Pass |  | [03-books-list](docs/images/manual-testing/03-books-list.png) |
+| 4 | Public | Use search `?q=` with a known title | Matching books appear | Pass |  | [04-search](docs/images/manual-testing/04-search.png)<br>[04b-search-no-results](docs/images/manual-testing/04b-search-no-results.png) |
+| 5 | Public | Open a book detail URL | Title, author, price, description | Pass |  | [05-book-detail](docs/images/manual-testing/05-book-detail.png) |
+| 6 | Auth | Register a new user | Redirect to books; flash success | Pass |  | [06a-register-form](docs/images/manual-testing/06a-register-form.png)<br>[06-register-success](docs/images/manual-testing/06-register-success.png) |
+| 7 | Auth | On Register, enter an invalid email format | Browser validation blocks submit; user is prompted to enter a valid email | Pass |  | [24-register-email-required](docs/images/manual-testing/24-register-email-required.png) |
+| 8 | Auth | On Register, enter a password under 6 characters | Browser validation prompts “Use at least 6 characters” | Pass |  | [25-register-password-min-length](docs/images/manual-testing/25-register-password-min-length.png) |
+| 9 | Auth | Register with mismatched passwords | Error message shown; account not created | Pass |  | [26-register-passwords-dont-match](docs/images/manual-testing/26-register-passwords-dont-match.png) |
+| 10 | Auth | Log out | Session cleared; home or login | Pass |  | [07-logout](docs/images/manual-testing/07-logout.png) |
+| 11 | Auth | Log in with correct password | Redirect; flash success | Pass |  | [08-login-success](docs/images/manual-testing/08-login-success.png) |
+| 12 | Auth | Log in with wrong password | Stays on login; flash error | Pass |  | [09-login-fail](docs/images/manual-testing/09-login-fail.png) |
+| 13 | Auth | Register duplicate email | Error; no duplicate user | Pass |  | [10-register-duplicate](docs/images/manual-testing/10-register-duplicate.png) |
+| 14 | Reviews | While logged out, open book detail | No POST review without login | Pass |  | [11-reviews-guest](docs/images/manual-testing/11-reviews-guest.png) |
+| 15 | Reviews | Post a review (logged in) | Review appears on page | Pass |  | [12-review-created](docs/images/manual-testing/12-review-created.png) |
+| 16 | Reviews | Edit **your** review | Updated text/rating shown | Pass |  | [13-review-edit](docs/images/manual-testing/13-review-edit.png) |
+| 17 | Reviews | Delete **your** review | Review removed | Pass |  | [14-review-delete](docs/images/manual-testing/14-review-delete.png) |
+| 18 | Reviews | Attempt to delete another user’s review (second account) | Blocked with message | Pass |  | [15-review-owner-block](docs/images/manual-testing/15-review-owner-block.png) |
+| 19 | Cart | Add book to cart | Line appears with correct title/qty | Pass |  | [16-cart-add](docs/images/manual-testing/16-cart-add.png) |
+| 20 | Cart | Change quantity / remove line | Totals and rows update | Pass |  | [17-cart-update-remove](docs/images/manual-testing/17-cart-update-remove.png)<br>[17b-cart-remove-confirm](docs/images/manual-testing/17b-cart-remove-confirm.png)<br>[17c-cart-updated](docs/images/manual-testing/17c-cart-updated.png) |
+| 21 | Cart | Checkout with empty cart | Error flash; redirect to cart | Pass |  | [18-checkout-empty](docs/images/manual-testing/18-checkout-empty.png) |
+| 22 | Orders | Checkout with items | Order on Orders page; cart empty | Pass |  | [19-checkout-success](docs/images/manual-testing/19-checkout-success.png)<br>[19b-orders-page](docs/images/manual-testing/19b-orders-page.png) |
+| 23 | Admin | Open `/admin/analytics` as normal user | 403 Forbidden page | Pass |  |  |
+| 24 | Admin | Same as admin user | Dashboard metrics load | Pass |  | [21-analytics-admin](docs/images/manual-testing/21-analytics-admin.png) |
+| 25 | Admin | Add a new book via Analytics → Add book | Book created and visible in catalogue | Pass |  | [22-admin-add-book](docs/images/manual-testing/22-admin-add-book.png)<br>[23-admin-book-added](docs/images/manual-testing/23-admin-book-added.png) |
+| 26 | Orders | Large order test (multiple items and quantities) | Cart subtotal matches checkout total; order summary lists all items | Pass |  | [27-large-order-cart](docs/images/manual-testing/27-large-order-cart.png)<br>[28-large-order-checkout](docs/images/manual-testing/28-large-order-checkout.png)<br>[29-large-order-checkout-total](docs/images/manual-testing/29-large-order-checkout-total.png) |
+| 27 | Orders | Log out during checkout, then log back in | Redirects to login and returns to checkout (via `next=`); checkout can continue | Pass |  | [30-checkout-logout-login-continue](docs/images/manual-testing/30-checkout-logout-login-continue.png) |
+| 28 | Auth | When logged in, check the navigation bar | Login/Register are hidden; authenticated links are shown instead (Cart/Orders/Logout) | Pass |  | [31-nav-logged-in-hides-login-register](docs/images/manual-testing/31-nav-logged-in-hides-login-register.png) |
+| 29 | Reviews | Attempt to post a review while logged out | Redirects to login; after login the user can return and submit the review | Pass |  |  |
+| 30 | Cart | Attempt “Add to cart” while logged out | Redirects to login; after login the user can add the book to cart | Pass |  |  |
+| 31 | Admin | Add book: enter an invalid price (non-numeric or 0/negative) | Blocked with validation errors (“Price must be a number (e.g. 12.99).” / “Price must be greater than 0.”) | Pass |  |  |
+| 32 | Cart | Update cart quantity using letters | Browser blocks non-numeric input (“Enter a number”) so quantity validation happens before submit | Pass |  | [35-cart-quantity-non-numeric](docs/images/manual-testing/35-cart-quantity-non-numeric.png) |
+
+#### 404 page (assessor note + evidence)
+
+- **Where to find it:** click **Sitemap** in the footer (route: **`/sitemap`**). This route is intentionally not implemented so the custom 404 page is shown.
+
+![Custom 404 page](docs/images/validation/404-page.png)
+
+Where something failed during manual runs, I kept **screenshots** or a short log and noted the fix in the bug table or devlog.
+
+#### Validation and edge-case checks (input correctness)
+
+These checks focus on places where user input can be correct/incorrect and where logic could break if validation was missing. Most validation is **server-side** (Flask routes) and is shown to the user via **flash messages**.
+
+- **Register (`/register`)**
+  - **Valid**: new email + matching passwords → account created and logged in.
+  - **Invalid**:
+    - duplicate email → blocked with a message (see manual test **#10**).
+    - password confirmation mismatch → blocked with an error flash.
+
+- **Login (`/login`)**
+  - **Valid**: correct email/password → logged in and redirected.
+  - **Invalid**: wrong password → stays on login with error flash (manual test **#9**).
+
+- **Reviews (create/edit/delete)**
+  - **Create review**:
+    - blocked when logged out (redirect to login; manual test **#11**).
+    - rating must be **1–5** and body must not be empty (server-side checks).
+  - **Edit/delete**:
+    - only the review owner can edit/delete (server-side ownership guard; manual tests **#13–#15**).
+
+- **Cart**
+  - **Quantity rules**: quantity < 1 is treated as remove (keeps totals consistent).
+  - **Auth guard**: cart routes require login (tested in automated suite).
+
+- **Checkout**
+  - **Empty cart**: checkout is blocked with a flash + redirect back to cart (manual test **#18**).
+  - **Valid**: creates an order + order items and clears the cart (manual test **#19**).
+
+- **Admin-only routes**
+  - Non-admins receive **403** on analytics and admin pages (manual test **#20**, automated tests).
+  - Admin “Add book” checks:
+    - required fields (title/author/price) must be present.
+    - price must be numeric and > 0.
+    - optional cover filename must exist under `static/img/covers/`.
+    - duplicate (title + author) is blocked.
+
