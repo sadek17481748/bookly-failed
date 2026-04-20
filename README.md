@@ -1343,3 +1343,169 @@ This document compiles helpful references and sources related to Flask, SQLAlche
 
 ---
 
+## Flask Application Structure and Best Practices
+
+- **Application Factory Pattern**  
+  https://flask.palletsprojects.com/en/2.3.x/patterns/appfactories/
+
+- **Flask Configuration Management**  
+  https://flask.palletsprojects.com/en/2.3.x/config/
+
+- **Using python-dotenv for Environment Variables**  
+  https://github.com/theskumar/python-dotenv
+
+- **BluePrints in Flask**  
+  https://flask.palletsprojects.com/en/2.3.x/blueprints/
+
+- **Error Handling in Flask**  
+  https://flask.palletsprojects.com/en/2.3.x/errorhandling/
+
+- **Registering CLI Commands in Flask**  
+  https://flask.palletsprojects.com/en/2.3.x/cli/
+
+- **Deployment Considerations (Gunicorn, Heroku)**  
+  https://devcenter.heroku.com/categories/python
+
+---
+
+## Flask-Login and User Authentication
+
+- **Flask-Login Documentation**  
+  https://flask-login.readthedocs.io/en/latest/
+
+- **Password Hashing with Werkzeug**  
+  https://werkzeug.palletsprojects.com/en/2.3.x/utils/#module-werkzeug.security
+
+- **Security Best Practices in Flask**  
+  - Use HTTPS in production  
+  - Validate email addresses properly  
+  - Protect against CSRF (consider flask-wtf)  
+  https://owasp.org/www-community/controls/Session_Management  
+  https://owasp.org/www-community/Input_Validation
+
+---
+
+## Flask and SQLAlchemy ORM
+
+- **SQLAlchemy ORM Documentation**  
+  https://docs.sqlalchemy.org/en/14/orm/
+
+- **Creating and Dropping Tables**  
+  https://docs.sqlalchemy.org/en/14/orm/session_api.html#sqlalchemy.orm.session.Session
+
+- **Application-wide Database Object Pattern**  
+  https://flask-sqlalchemy.palletsprojects.com/en/3.0.x/contexts/#application-setup
+
+- **Querying and Filtering**  
+  https://docs.sqlalchemy.org/en/14/orm/query.html
+
+---
+
+## Flask Static Files and URL Handling
+
+- **Flask Static Files**  
+  https://flask.palletsprojects.com/en/2.3.x/quickstart/#static-files
+
+- **URL Building with `url_for`**  
+  https://flask.palletsprojects.com/en/2.3.x/templating/#url-for
+
+---
+
+## Database and Environment Configuration
+
+- **Using Environment Variables for Secrets**  
+  https://12factor.net/config
+
+- **Heroku DATABASE_URL Compatibility**  
+  - Heroku Postgres URL: https://devcenter.heroku.com/articles/heroku-postgresql#connecting-in-python  
+  - SQLAlchemy URL Schemes: https://docs.sqlalchemy.org/en/14/core/engines.html#database-urls
+
+---
+
+## Flask CLI Command Development
+
+- **Flask CLI Documentation**  
+  https://flask.palletsprojects.com/en/2.3.x/cli/
+
+- **Creating Custom CLI Commands**  
+  https://flask.palletsprojects.com/en/2.3.x/cli/#custom-commands
+
+- **Seeding Data and Migrations**  
+  - https://realpython.com/building-a-flask-and-sqlalchemy-application/  
+  - https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-webforms
+
+---
+
+## Common Security and Best Practices
+
+- **Input Validation and Sanitization**  
+  https://owasp.org/www-community/Input_Validation
+
+- **Cross-site Request Forgery (CSRF) Protection**  
+  https://flask-wtf.readthedocs.io/en/stable/csrf.html
+
+- **Session Security and Management**  
+  https://owasp.org/www-community/controls/Session_Management
+
+---
+
+## Miscellaneous
+
+- **Slug Creation and String Normalization in Python**  
+  https://slugify.readthedocs.io/en/latest/  
+  https://docs.python.org/3/library/re.html  
+  https://docs.python.org/3/library/stdtypes.html#str.casefold
+
+- **Path Handling with pathlib**  
+  https://docs.python.org/3/library/pathlib.html
+
+---
+
+This collection aims to provide authoritative sources to deepen your understanding and guide best practices in Python web development with Flask and SQLAlchemy.
+
+### Images used in this project
+
+**Wireframes** live in-repo as [`docs/wireframe-bookly.pdf`](docs/wireframe-bookly.pdf). Other coursework artefacts (e.g. Lighthouse exports) may sit only in the written submission. In the running site, cover art is SVG plus inline icons.
+
+| Image / asset type | Where it lives | Notes |
+|--------------------|----------------|-------|
+| **Wireframes** | `docs/wireframe-bookly.pdf` | PDF export of bookly screen planning. |
+| **Book cover graphics** | `static/img/covers/*.svg` (50 files) | Generated SVG “posters” (gradient + title + author + small bookly label). Served as static files; `cover_url` in the DB points at paths like `/static/img/covers/1984.svg`. |
+| **Icons in footer** | Inline `<svg>` in `templates/base.html` | Simple vector icons for social links (not raster images). |
+
+### Image credits
+
+The catalogue uses cover images to make the UI feel closer to a real storefront. Where a real-world cover thumbnail was used, the source is credited below.
+
+| Asset | Source / link | Credit / licence note |
+|------|---------------|------------------------|
+| **Book cover images** (`static/img/covers/*.{png,jpg,svg}`) | *(links to be added)* | Local cover assets served from `static/img/covers/`. Individual external sources are credited in the rows below. |
+| **Cover source (Where the Crawdads Sing)** | [Wikipedia page](https://en.wikipedia.org/wiki/Where_the_Crawdads_Sing) | Source link for the cover image used. |
+| **Cover source (The Help)** | [Wikipedia page](https://en.wikipedia.org/wiki/The_Help) | Source link for the cover image used. |
+| **Cover source (Me Before You)** | [Wikipedia page](https://en.wikipedia.org/wiki/Me_Before_You) | Source link for the cover image used. |
+| **Cover source (The Road)** | [Wikipedia page](https://en.wikipedia.org/wiki/The_Road) | Source link for the cover image used. |
+| **Cover source (Life of Pi)** | [Wikipedia page](https://en.wikipedia.org/wiki/Life_of_Pi) | Source link for the cover image used. |
+| **Cover source (The Kite Runner)** | [Wikipedia page](https://en.wikipedia.org/wiki/The_Kite_Runner) | Source link for the cover image used. |
+| **Cover source (A Thousand Splendid Suns)** | [Wikipedia page](https://en.wikipedia.org/wiki/A_Thousand_Splendid_Suns) | Source link for the cover image used. |
+| **Cover source (The Alchemist)** | [Wikipedia page](https://en.wikipedia.org/wiki/The_Alchemist_(novel)) | Source link for the cover image used. |
+| **Cover source (The Woman in the Window)** | [Wikipedia page](https://en.wikipedia.org/wiki/The_Woman_in_the_Window) | Source link for the cover image used. |
+| **Cover source (The Reversal)** | [Wikipedia page](https://en.wikipedia.org/wiki/The_Reversal) | Source link for the cover image used. |
+| **Cover source (And Then There Were None)** | [Wikipedia page](https://en.wikipedia.org/wiki/And_Then_There_Were_None) | Source link for the cover image used. |
+| **Cover source (Big Little Lies)** | [Wikipedia page](https://en.wikipedia.org/wiki/Big_Little_Lies_(novel)) | Source link for the cover image used. |
+| **Cover source (The Silent Patient)** | [Wikipedia page](https://en.wikipedia.org/wiki/The_Silent_Patient) | Source link for the cover image used. |
+| **Cover source (In the Woods)** | [Wikipedia page](https://en.wikipedia.org/wiki/In_the_Woods) | Source link for the cover image used. |
+| **Cover source (Gone Girl)** | [Wikipedia page](https://en.wikipedia.org/wiki/Gone_Girl_(novel)) | Source link for the cover image used. |
+| **Cover source (The Girl with the Dragon Tattoo)** | [Wikipedia page](https://en.wikipedia.org/wiki/The_Girl_with_the_Dragon_Tattoo) | Source link for the cover image used. |
+| **Cover source (The Da Vinci Code)** | [Wikipedia page](https://en.wikipedia.org/wiki/The_Da_Vinci_Code) | Source link for the cover image used. |
+| **Cover source (Ready Player One)** | [Wikipedia page](https://en.wikipedia.org/wiki/Ready_Player_One) | Source link for the cover image used. |
+| **Cover source (Frankenstein)** | [Wikipedia page](https://en.wikipedia.org/wiki/Frankenstein) | Source link for the cover image used. |
+| **Cover source (The Martian)** | [Wikipedia page](https://en.wikipedia.org/wiki/The_Martian) | Source link for the cover image used. |
+| **Cover source (Ender’s Game)** | [Wikipedia page](https://en.wikipedia.org/wiki/Ender%27s_Game) | Source link for the cover image used. |
+| **Cover source (Dune)** | [Wikipedia page](https://en.wikipedia.org/wiki/Dune_(novel)) | Source link for the cover image used. |
+| **Cover source (The Hobbit)** | [Wikipedia page](https://en.wikipedia.org/wiki/The_Hobbit) | Source link for the cover image used. |
+| **Cover source (The Great Gatsby)** | [Wikipedia page](https://en.wikipedia.org/wiki/The_Great_Gatsby) | Source link for the cover image used. |
+| **Wireframes PDF** (`docs/wireframe-bookly.pdf`) | N/A | Created by me during the planning phase. |
+| **Footer icons** (inline `<svg>`) | *(links to be added if applicable)* | Vector icons embedded directly in templates. |
+
+---
+
