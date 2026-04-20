@@ -100,6 +100,84 @@ Based on the routes above, my wireframe plan is:
 - **Admin add book (`/admin/books/new`)**: form to add a new book to the catalogue.
 - **Error pages (403/404)**: friendly messages with navigation back to safe pages.
 
+## Quick links (assessor)
+
+- **Repository (README / code)**: [`sadek17481748/bookly`](https://github.com/sadek17481748/bookly-failed)
+- **Wireframes section (README anchor)**: [Wireframes](https://github.com/sadek17481748/bookly-failed#wireframes)
+- **Live app (Heroku)**: [`bookly-final-98e88d5d388e.herokuapp.com`](https://bookly-final-98e88d5d388e.herokuapp.com/)
+- **Live app login page**: [Login](https://bookly-final-98e88d5d388e.herokuapp.com/login)
+- **Analytics dashboard (admin-only)**: [`/admin/analytics`](https://bookly-final-98e88d5d388e.herokuapp.com/admin/analytics) — shows revenue, orders, top sellers, and catalogue breakdown (requires the assessor admin login).
+- **Assessor analytics login**: `analytics@testemail.com` / `test123` — admin account for accessing the analytics dashboard on the live site.
+- **Bug tracker (GitHub Project board)**: [`github.com/users/sadek17481748/projects/6`](https://github.com/users/sadek17481748/projects/6)
+- **GitHub Pages (documentation site)**: [`sadek17481748.github.io/bookly`](https://sadek17481748.github.io/bookly/)
+- **Closed issues (progress log)**: [GitHub Issues (closed)](https://github.com/sadek17481748/bookly-failed/issues?q=is%3Aissue%20state%3Aclosed)
+
+## Key UI screenshots (assessor)
+
+Screenshots are shown below so key screens are visible directly in this README.
+
+### Home
+
+![Home page](docs/images/manual-testing/01-home.png)
+
+### Books
+
+![Books list page](docs/images/manual-testing/03-books-list.png)
+
+### Contact
+
+![Contact page](docs/images/manual-testing/02-contact.png)
+
+### Login
+
+![Login page](docs/images/manual-testing/08-login-success.png)
+
+### Register
+
+![Register page](docs/images/manual-testing/06a-register-form.png)
+
+### Analytics (admin)
+
+![Analytics dashboard](docs/images/manual-testing/21-analytics-admin.png)
+
+---
+
+## Features
+
+### Public browsing
+
+- **Home** page with calls-to-action (browse, register).
+- **Book catalog** with optional **search** (`?q=`) over title and author (case-insensitive `ILIKE` in SQLAlchemy → Postgres).
+- **Book detail** with description, optional cover image path, cart form (if logged in), and reviews.
+
+### Authentication
+
+- **Register**, **login**, **logout** (Flask-Login).
+- Passwords stored with **Werkzeug** hashing (`set_password` / `check_password` on `User`).
+
+### Reviews (CRUD)
+
+- **Create** and **read** reviews on a book; **update** and **delete** only for the **owning** user (checked in `books.py`).
+- Reviews are stored with `user_id` and `book_id` foreign keys.
+
+### Cart & checkout
+
+- Add to cart (merge quantity if the same book is already in the cart).
+- Update quantity or remove a line.
+- **Checkout** collects minimal shipping fields, creates an **order** + **order items**, then **clears the cart** (no external payment gateway—orders are persisted for coursework realism).
+
+### Admin analytics
+
+- **Admin-only** route (`is_admin` on `users`).
+- Dashboard metrics from SQL aggregates: revenue, order counts, top sellers, books per category, recent orders.
+
+### Book covers
+
+- Generated **SVG** artwork per seeded title lives under `static/img/covers/`.
+- `book_covers.py` maps each title to a stable URL; seeds set `cover_url` so templates can render `<img src="...">`.
+
+---
+
 ## User Experience (UX)
 
 ### Navigation
@@ -164,42 +242,6 @@ In practice, I thought about three “audience groups” while building and test
 - **Admin user**: manage the catalogue (add books) and review store performance using the analytics dashboard.
 
 The user stories above are the ones I used to guide feature scope and testing. They map directly to the live routes and the database flows (catalogue read, review write, cart write, order + order items write, and analytics aggregates).
-
----
-
-## Features
-
-### Public browsing
-
-- **Home** page with calls-to-action (browse, register).
-- **Book catalog** with optional **search** (`?q=`) over title and author (case-insensitive `ILIKE` in SQLAlchemy → Postgres).
-- **Book detail** with description, optional cover image path, cart form (if logged in), and reviews.
-
-### Authentication
-
-- **Register**, **login**, **logout** (Flask-Login).
-- Passwords stored with **Werkzeug** hashing (`set_password` / `check_password` on `User`).
-
-### Reviews (CRUD)
-
-- **Create** and **read** reviews on a book; **update** and **delete** only for the **owning** user (checked in `books.py`).
-- Reviews are stored with `user_id` and `book_id` foreign keys.
-
-### Cart & checkout
-
-- Add to cart (merge quantity if the same book is already in the cart).
-- Update quantity or remove a line.
-- **Checkout** collects minimal shipping fields, creates an **order** + **order items**, then **clears the cart** (no external payment gateway—orders are persisted for coursework realism).
-
-### Admin analytics
-
-- **Admin-only** route (`is_admin` on `users`).
-- Dashboard metrics from SQL aggregates: revenue, order counts, top sellers, books per category, recent orders.
-
-### Book covers
-
-- Generated **SVG** artwork per seeded title lives under `static/img/covers/`.
-- `book_covers.py` maps each title to a stable URL; seeds set `cover_url` so templates can render `<img src="...">`.
 
 ---
 
@@ -622,48 +664,6 @@ To make marking simpler, I created a dedicated admin account for the analytics d
 After logging in, the admin analytics dashboard is available at **`/admin/analytics`**.
 
 **Note (live Heroku app):** The Heroku deployment uses its own Postgres database, so the account must be **registered on the live site** and then promoted to admin (set `users.is_admin = true`). This can be done using `heroku pg:psql` or by running the existing CLI command (`make-admin`) against the Heroku app.
-
-## Quick links (assessor)
-
-- **Repository (README / code)**: [`sadek17481748/bookly`](https://github.com/sadek17481748/bookly-failed)
-- **Wireframes section (README anchor)**: [Wireframes](https://github.com/sadek17481748/bookly-failed#wireframes)
-- **Live app (Heroku)**: [`bookly-final-98e88d5d388e.herokuapp.com`](https://bookly-final-98e88d5d388e.herokuapp.com/)
-- **Live app login page**: [Login](https://bookly-final-98e88d5d388e.herokuapp.com/login)
-- **Analytics dashboard (admin-only)**: [`/admin/analytics`](https://bookly-final-98e88d5d388e.herokuapp.com/admin/analytics) — shows revenue, orders, top sellers, and catalogue breakdown (requires the assessor admin login).
-- **Assessor analytics login**: `analytics@testemail.com` / `test123` — admin account for accessing the analytics dashboard on the live site.
-- **Bug tracker (GitHub Project board)**: [`github.com/users/sadek17481748/projects/6`](https://github.com/users/sadek17481748/projects/6)
-- **GitHub Pages (documentation site)**: [`sadek17481748.github.io/bookly`](https://sadek17481748.github.io/bookly/)
-- **Closed issues (progress log)**: [GitHub Issues (closed)](https://github.com/sadek17481748/bookly-failed/issues?q=is%3Aissue%20state%3Aclosed)
-
-## Key UI screenshots (assessor)
-
-Screenshots are shown below so key screens are visible directly in this README.
-
-### Home
-
-![Home page](docs/images/manual-testing/01-home.png)
-
-### Books
-
-![Books list page](docs/images/manual-testing/03-books-list.png)
-
-### Contact
-
-![Contact page](docs/images/manual-testing/02-contact.png)
-
-### Login
-
-![Login page](docs/images/manual-testing/08-login-success.png)
-
-### Register
-
-![Register page](docs/images/manual-testing/06a-register-form.png)
-
-### Analytics (admin)
-
-![Analytics dashboard](docs/images/manual-testing/21-analytics-admin.png)
-
----
 
 ### Automated tests (no Postgres required for pytest)
 
