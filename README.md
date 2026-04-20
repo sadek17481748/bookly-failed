@@ -1509,3 +1509,28 @@ The catalogue uses cover images to make the UI feel closer to a real storefront.
 
 ---
 
+## Attributions
+
+- **Book metadata** in `cli.py` / `seed_books.sql` is synthetic catalogue text for coursework (not an official publisher catalogue).
+- **Cover assets** live under `static/img/covers/` (a mix of SVG placeholders and raster cover images where credited in the Image credits section).
+- **Social icons** in the footer use simple SVG paths; outbound links are examples only.
+- **Learning sources** are listed under [Sources and references](#sources-and-references); bookly’s implementation was written for this coursework and follows those tutorials only at a **conceptual** level unless otherwise cited in code comments.
+
+---
+
+## Additional Notes
+
+- **Use of AI:** Generative AI was used as an **assistant** during development (mainly spell-checking and improving the clarity of documentation). It also helped with **drafting and iterating on automated tests** and discussing approaches for parts of the Python/Flask code (validation, structure, and edge cases). The final implementation was still **written/edited, verified, and tested by me**, and any AI suggestions were only kept when they matched the project’s real behaviour. A concise log of AI-assisted areas is included in **Testing and Bugs → Use of AI (assistance log)**.
+- **`docs/legacy-code.md` (development snapshots):** Earlier in development, my GitHub/Heroku setup ended up in a broken state (the repo would not accept new commits reliably and the Heroku connection stopped working). I restarted the project setup and moved the work into a fresh repository on a new GitHub account, linked to a new Heroku app/account. To make the development progression easy to review, I kept small “before → after” code snapshots in `docs/legacy-code.md`.
+- **`docs/devlog.md`** — removed (notes merged into `README.md`).
+- **`docs/testing.md`** — removed (moved into `README.md`).
+- During development, when the schema changed, I used **`flask reset-db`** (destructive) and re-seeded as needed.
+
+---
+
+## Author
+
+- **Name:** Mohammed Sadek Hussain
+- **Institution:** New City College
+- **Course / project:** Project 3
+- **Repository / submission:** Code and README submitted through **New City College** coursework channels (and GitHub if the assessor was given a link separately).
