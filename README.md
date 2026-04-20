@@ -1109,3 +1109,29 @@ The final code and write-up were still checked, edited, and tested manually to m
 
 
 
+### Lighthouse testing
+
+I ran **Lighthouse** (Chrome DevTools → Lighthouse) against the main pages (home, books list, book detail). Scores and any follow-up tweaks are summarised in the **submitted report** so this README stays in sync with what assessors receive.
+
+#### Lighthouse report screenshot (Home)
+
+![Lighthouse results - Home](docs/images/validation/lighthouse-home.png)
+
+### HTML, CSS and JS validation
+
+I validated **HTML** with the W3C Markup Validator and **CSS** with the W3C CSS Validator on representative pages. **JavaScript** was checked using JSHint and with the editor’s built-in diagnostics on `static/js/main.js`.
+
+#### W3C CSS validation (no errors)
+
+![W3C CSS validator - no errors](docs/images/validation/w3c-css-valid.png)
+
+#### W3C HTML validation results
+
+![W3C HTML validator results](docs/images/validation/w3c-html-results.png)
+
+#### JSHint results (`static/js/main.js`)
+
+![JSHint results](docs/images/validation/jshint-main-js.png)
+
+---
+
